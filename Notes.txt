@@ -1,0 +1,49 @@
+Section 1
+---------
+
+What features does the app need?
+
+    Invite promoters
+    Creating accounts
+    Logging in as a promoter
+    Adding concerts
+    Editing concerts
+    Publishing concerts
+    Integration with stripe connect to do direct payouts
+    Purchasing tickets
+
+        We don't necessarily want to do these in the order given, we want to go through this list and work through
+        what these steps entail and if we even need to do them
+
+            Purchasing tickets, we need this.
+
+            We can do direct payouts with stripe manually. Stripe will accept all the payments from customers, we
+            will have all of our payments in an account and every so often we will manually payout to concert
+            promoters their cut.
+
+            Publishing concert's doesn't have to be done by the promoter, a promoter can reach out to us and we
+            can simply toggle the publishing of a concert for now.
+
+            Editing concerts, the promoter doesn't need access to this right away. They can send an email to us
+            with the details and we can enter it manually.
+
+            Adding concerts, same as the above.
+
+            Creating accounts isn't needed since now we have no immediate need after eliminating the above.
+
+            Inviting promoters, same as the above.
+
+        So we come to the conclusion that purchasing the tickets is the most important aspect of the application
+        that we need to do first.
+
+What should we test first?
+
+    Purchasing tickets
+        View the concert listing
+            Allowing people to view published concerts
+            Not allowing viewing of unpublished concerts
+        Pay for the tickets
+        View the purchased tickets in the browser
+        Send an email confirmation w/ link to the tickets.
+
+We can start by asserting that a user can view a concert listing with a feature test.
