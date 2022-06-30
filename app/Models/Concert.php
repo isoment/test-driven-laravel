@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,4 +16,13 @@ class Concert extends Model
     protected $casts = [
         'date' => 'datetime'
     ];
+
+    /**
+     *  We can call $concert->formatted_date to run this.
+     *  @return string
+     */
+    public function getFormattedDateAttribute() : string
+    {
+        return $this->date->format('F j, Y');
+    }
 }

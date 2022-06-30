@@ -46,4 +46,6 @@ What should we test first?
         View the purchased tickets in the browser
         Send an email confirmation w/ link to the tickets.
 
-We can start by asserting that a user can view a concert listing with a feature test.
+We can start by asserting that a user can view a concert listing with a feature test. To do this we create
+a new Concert model for a sample concert, make a request to the url and assert that we see the new
+concert model's data in the returned view.

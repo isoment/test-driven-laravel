@@ -7,13 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class ViewConcertListingTest extends TestCase
 {
     use RefreshDatabase;
 
     /**
      *  @test
-     *  A basic test example.
      */
     public function a_user_can_view_a_concert_listing()
     {
