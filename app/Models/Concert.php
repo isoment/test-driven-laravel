@@ -60,4 +60,23 @@ class Concert extends Model
     {
         return $query->whereNotNull('published_at');
     }
+
+    /**
+     *  Order the tickets by creating entries in the order and tickets tables
+     *  @param string $email
+     *  @param int $ticketQuantity
+     *  @return App\Models\Order
+     */
+    public function orderTickets(string $email, int $ticketQuantity) : Order
+    {
+        $order = $this->orders()->create([
+            'email' => $email
+        ]);
+
+        foreach (range(1, $ticketQuantity) as $i) {
+            $order->tickets()->create([]);
+        }
+
+        return $order;
+    }
 }

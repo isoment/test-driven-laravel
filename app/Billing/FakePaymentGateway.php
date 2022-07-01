@@ -15,17 +15,31 @@ class FakePaymentGateway implements PaymentGateway
         $this->charges = collect();
     }
 
+    /**
+     *  A dummy test token
+     *  @return string
+     */
     public function getValidTestToken() : string
     {
         return 'Valid Token';
     }
 
-    public function charge($amount, $token) : void
+    /**
+     *  Add a charge to the collection
+     *  @param int $amount
+     *  @param string $token
+     *  @return void
+     */
+    public function charge(int $amount, string $token) : void
     {
         $this->charges[] = $amount;
     }
 
-    public function totalCharges()
+    /**
+     *  Sum the individual charges
+     *  @return int
+     */
+    public function totalCharges() : int
     {
         return $this->charges->sum();
     }
