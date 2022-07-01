@@ -14,7 +14,7 @@ class ViewConcertListingTest extends TestCase
     /**
      *  @test
      */
-    public function a_user_can_view_a_concert_listing()
+    public function a_user_can_view_a_published_concert_listing()
     {
         $concert = Concert::create([
             'title' => 'The Red Chord',
@@ -26,7 +26,8 @@ class ViewConcertListingTest extends TestCase
             'city' => 'Laraville',
             'state' => 'NY',
             'zip' => '01111',
-            'additional_information' => 'Lorem Ipson whatever lkfdsof'
+            'additional_information' => 'Lorem Ipson whatever lkfdsof',
+            'published_at' => Carbon::parse('-1 week')
         ]);
 
         $response = $this->get('/concerts/' . $concert->id);
