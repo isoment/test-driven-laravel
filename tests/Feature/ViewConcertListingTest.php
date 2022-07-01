@@ -42,4 +42,18 @@ class ViewConcertListingTest extends TestCase
             ->assertSee('Laraville, NY 01111')
             ->assertSee('Lorem Ipson whatever lkfdsof');
     }
+
+    /**
+     *  @test
+     */
+    public function user_cannot_view_unpublished_concert_listings()
+    {
+        $concert = Concert::factory()->create([
+            'published_at' => null
+        ]);
+
+        $response = $this->get('/concerts/' . $concert->id);
+
+        $response->assertStatus(404);
+    }
 }
