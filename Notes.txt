@@ -136,6 +136,12 @@ App\Exceptions\Handler.php
         throw $e;
     }
 
+    An even better approach is to call
+
+        $this->withoutExceptionHandling();
+
+    At the start of a test. Sometimes this will give us better errors that provide more useable information.
+
 We have seen in that past that when passing a class into the constructor of a class the laravel
 service container can automatically resolve it. This only works if the class has no dependencies or 
 only depends on other concrete classes.
@@ -148,3 +154,14 @@ only depends on other concrete classes.
     which class we want the interface to resolve to, in this case out FakePaymentGateway for testing.
 
     $this->app->instance(PaymentGateway::class, $paymentGateway);
+
+When we are doing the same thing to set up all our tests in a file we can use...
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+        $this->paymentGateway = new FakePaymentGateway;
+        $this->app->instance(PaymentGateway::class, $this->paymentGateway);
+    }
+
+    This will run the setUp() method before every test.
