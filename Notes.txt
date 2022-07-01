@@ -71,3 +71,45 @@ modify the factory state without defining it specifically in the create() method
     And when we create a factory call it like...
 
         Concert::factory()->published()->create();
+
+
+Section 2
+---------
+
+Browser testing vs Endpoint testing...
+
+Browser Testing involves using a tool like Selenium to simulate a user's actions inside the browser.
+
+    Pros...
+
+        Emulates exactly how a user interacts with an application.
+        Gives confidence the app is working end to end.
+
+    Cons...
+
+        Introduces a new tool.
+        Slower.
+        More brittle, UI changes can break it.
+        Complex setup.
+        Not interacting with code directly, making assertions through the UI.
+
+Endpoint tests simulate how the browser would interact with the server. Instead of how the user interacts with
+the app.
+
+    Pros...
+
+        Faster.
+        Doesn't require additional tooling.
+        Interaction with stable data structures, UI changes would break it.
+        Interaction directly with code.
+
+    Cons...
+
+        Untested gap between the front and backend.
+
+It comes down to what do we want from test?
+
+    Confidence that the system works.
+    Reliable, don't break for unimportant reasons.
+    Fast so they can run often.
+    Simple with minimal tooling, easy to recreate a test env.
