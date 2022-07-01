@@ -47,4 +47,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     *  Can override this method to rethrow the error. Sometimes has
+     *  some more useful info.
+     *  @throws Throwable $e
+     */
+    // public function render($request, Throwable $e) : void
+    // {
+    //     throw $e;
+    // }
 }

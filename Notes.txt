@@ -78,38 +78,73 @@ Section 2
 
 Browser testing vs Endpoint testing...
 
-Browser Testing involves using a tool like Selenium to simulate a user's actions inside the browser.
+    Browser Testing involves using a tool like Selenium to simulate a user's actions inside the browser.
 
-    Pros...
+        Pros...
 
-        Emulates exactly how a user interacts with an application.
-        Gives confidence the app is working end to end.
+            Emulates exactly how a user interacts with an application.
+            Gives confidence the app is working end to end.
 
-    Cons...
+        Cons...
 
-        Introduces a new tool.
-        Slower.
-        More brittle, UI changes can break it.
-        Complex setup.
-        Not interacting with code directly, making assertions through the UI.
+            Introduces a new tool.
+            Slower.
+            More brittle, UI changes can break it.
+            Complex setup.
+            Not interacting with code directly, making assertions through the UI.
 
-Endpoint tests simulate how the browser would interact with the server. Instead of how the user interacts with
-the app.
+    Endpoint tests simulate how the browser would interact with the server. Instead of how the user interacts
+    with the app.
 
-    Pros...
+        Pros...
 
-        Faster.
-        Doesn't require additional tooling.
-        Interaction with stable data structures, UI changes would break it.
-        Interaction directly with code.
+            Faster.
+            Doesn't require additional tooling.
+            Interaction with stable data structures, UI changes would break it.
+            Interaction directly with code.
 
-    Cons...
+        Cons...
 
-        Untested gap between the front and backend.
+            Untested gap between the front and backend.
 
-It comes down to what do we want from test?
+    It comes down to what do we want from test?
 
-    Confidence that the system works.
-    Reliable, don't break for unimportant reasons.
-    Fast so they can run often.
-    Simple with minimal tooling, easy to recreate a test env.
+        Confidence that the system works.
+        Reliable, don't break for unimportant reasons.
+        Fast so they can run often.
+        Simple with minimal tooling, easy to recreate a test env.
+
+Now we can start hashing out a purchasing tickets feature in our application. We can start with an endpoint
+test.
+
+    We known that we will need a concert to purchase tickets for. The user can make a json request to the
+    endpoint with their email, ticket quantity and also a payment token from stripe. We can define a payment
+    gateway as the actual stripe gateway and make a request to the stripe servers during the test.
+
+    Another approach would also be to set up a fake payment gateway for the test.
+
+When we are running tests sometimes we can get some more useful errors by overriding the render() method in
+App\Exceptions\Handler.php
+
+    /**
+     *  Can override this method to rethrow the error. Sometimes has
+     *  some more useful info.
+     *  @throws Throwable $e
+     */
+    public function render($request, Throwable $e) : void
+    {
+        throw $e;
+    }
+
+We have seen in that past that when passing a class into the constructor of a class the laravel
+service container can automatically resolve it. This only works if the class has no dependencies or 
+only depends on other concrete classes.
+
+    If we have a class that implements an interface and we want to type hint that interface in a class
+    constructor we need to tell the container how to resolve that interface.
+
+    In the ConcertOrderController when we pass in an interface in the constructor laravel does not
+    known how to resolve this. In our PurchaseTicketsTest we can instruct the service container
+    which class we want the interface to resolve to, in this case out FakePaymentGateway for testing.
+
+    $this->app->instance(PaymentGateway::class, $paymentGateway);
