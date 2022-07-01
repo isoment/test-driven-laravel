@@ -18,6 +18,11 @@ class Concert extends Model
         'date' => 'datetime'
     ];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     /**
      *  Display the date in the fromat of... 'December 13, 2016'
      *  A computed property. We can call $concert->formatted_date now.
