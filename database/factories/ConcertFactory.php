@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ConcertFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     *  Define the model's default state.
      *
-     * @return array<string, mixed>
+     *  @return array<string, mixed>
      */
     public function definition()
     {
@@ -29,5 +29,31 @@ class ConcertFactory extends Factory
             'zip' => '90210',
             'additional_information' => 'Some sample additional information'
         ];
+    }
+
+    /**
+     *  Set the Concert factory state to published
+     *  @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function published() : Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => Carbon::parse('-1 week'),
+            ];
+        });
+    }
+
+    /**
+     *  Set the Concert factory state to unpublished
+     *  @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unpublished() : Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => NULL,
+            ];
+        });
     }
 }

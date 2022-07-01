@@ -49,3 +49,25 @@ What should we test first?
 We can start by asserting that a user can view a concert listing with a feature test. To do this we create
 a new Concert model for a sample concert, make a request to the url and assert that we see the new
 concert model's data in the returned view.
+
+When we create factories for models we can take advantage of a laravel feature called factory states which allow us to
+modify the factory state without defining it specifically in the create() method.
+
+    We can add this to a factory file...
+
+        /**
+        *  Set the Concert factory state to published
+        *  @return \Illuminate\Database\Eloquent\Factories\Factory
+        */
+        public function published() : Factory
+        {
+            return $this->state(function (array $attributes) {
+                return [
+                    'published_at' => Carbon::parse('-1 week'),
+                ];
+            });
+        }
+
+    And when we create a factory call it like...
+
+        Concert::factory()->published()->create();
