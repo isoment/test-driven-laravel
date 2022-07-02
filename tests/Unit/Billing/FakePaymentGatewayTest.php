@@ -25,13 +25,14 @@ class FakePaymentGatewayTest extends TestCase
 
     /**
      *  @test
+     *  @doesNotPerformAssertions
+     * 
+     *  When the payment token is invalid we will expect an exception to be thrown
+     *  and we will return. If no exception is thrown the test will fail. This test
+     *  does not assert anything so we can add @doesNotPerformAssertions
      */
     public function charges_with_an_invalid_payment_token_fail()
     {
-        /*
-            When the payment token is invalid we will expect an exception to be thrown
-            and we will return. If no exception is thrown the test will fail.
-        */
         try {
             $paymentGateway = new FakePaymentGateway;
             $paymentGateway->charge(2500, 'invalid-payment-token');
