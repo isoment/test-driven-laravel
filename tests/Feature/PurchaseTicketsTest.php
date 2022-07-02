@@ -19,8 +19,8 @@ class PurchaseTicketsTest extends TestCase
         parent::setUp();
 
         /*
-            When we pass the PaymentGateway interface into the ConcertOrderController laravel does
-            not know what to resolve. Here we can specify that we resolve the PaymentGateway interface
+            When we pass the PaymentGateway interface into the ConcertOrderController the service container 
+            does not know what to resolve. Here we can specify that we resolve the PaymentGateway interface
             to the FakePaymentGateway
         */
         $this->paymentGateway = new FakePaymentGateway;
@@ -74,6 +74,31 @@ class PurchaseTicketsTest extends TestCase
         $response->assertStatus(404);
         $this->assertEquals(0, $concert->orders()->count());
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
+    }
+
+    /**
+     *  @test
+     */
+    public function cannot_purchase_more_tickets_than_remain()
+    {
+        $concert = Concert::factory()->unpublished()->create();
+        $concert->addTickets(50);
+
+        $response = $this->orderTickets($concert->id, [
+            'email' => 'john@example.com',
+            'ticket_quantity' => 51,
+            'payment_token' => $this->paymentGateway->getValidTestToken()
+        ]);
+
+        /*
+            Assert that there is no order created, the customer was not charged
+            and the concert tickets are still available.
+        */
+        $response->assertStatus(422);
+        $order = $concert->orders()->where('email', 'john@example.com')->first();
+        $this->assertNull($order);
+        $this->assertEquals(0, $this->paymentGateway->totalCharges());
+        $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
     /**
