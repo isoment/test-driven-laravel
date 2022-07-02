@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Billing\FakePaymentGateway;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Billing\PaymentFailedException;
 
 class FakePaymentGatewayTest extends TestCase
 {
@@ -20,5 +21,24 @@ class FakePaymentGatewayTest extends TestCase
         $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
 
         $this->assertEquals(2500, $paymentGateway->totalCharges());
+    }
+
+    /**
+     *  @test
+     */
+    public function charges_with_an_invalid_payment_token_fail()
+    {
+        /*
+            When the payment token is invalid we will expect an exception to be thrown
+            and we will return. If no exception is thrown the test will fail.
+        */
+        try {
+            $paymentGateway = new FakePaymentGateway;
+            $paymentGateway->charge(2500, 'invalid-payment-token');
+        } catch(PaymentFailedException $e) {
+            return;
+        }
+
+        $this->fail();
     }
 }

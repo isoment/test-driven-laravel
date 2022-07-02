@@ -27,9 +27,9 @@ class PurchaseTicketsTest extends TestCase
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
     }
 
-    private function orderTickets($concert, array $params) : TestResponse
+    private function orderTickets(int $concertId, array $params) : TestResponse
     {
-        return $this->json('POST', "/concerts/{$concert}/orders", $params);
+        return $this->json('POST', "/concerts/{$concertId}/orders", $params);
     }
 
     /**
@@ -138,5 +138,25 @@ class PurchaseTicketsTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonFragment(['The payment token field is required.']);
+    }
+
+    /**
+     *  @test
+     */
+    public function an_order_is_not_created_if_payment_fails()
+    {
+        $this->withoutExceptionHandling();
+
+        $concert = Concert::factory()->create(['ticket_price' => 3250]);
+
+        $response = $this->orderTickets($concert->id, [
+            'email' => 'test@user.com',
+            'ticket_quantity' => 3,
+            'payment_token' => 'invalid-payment-token'
+        ]);
+
+        $response->assertStatus(422);
+        $order = $concert->orders()->where('email', 'test@user.com')->first();
+        $this->assertNull($order);
     }
 }
