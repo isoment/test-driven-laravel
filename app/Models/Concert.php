@@ -23,6 +23,11 @@ class Concert extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     /**
      *  Display the date in the fromat of... 'December 13, 2016'
      *  A computed property. We can call $concert->formatted_date now.
@@ -62,7 +67,9 @@ class Concert extends Model
     }
 
     /**
-     *  Order the tickets by creating entries in the order and tickets tables
+     *  An order is created with the buyers email. We get a collection of
+     *  the ticket quantity the user wants and then iterate over it assigning
+     *  each ticket to the order.
      *  @param string $email
      *  @param int $ticketQuantity
      *  @return App\Models\Order
@@ -73,10 +80,33 @@ class Concert extends Model
             'email' => $email
         ]);
 
-        foreach (range(1, $ticketQuantity) as $i) {
-            $order->tickets()->create([]);
+        $tickets = $this->tickets()->take($ticketQuantity)->get();
+
+        foreach ($tickets as $ticket) {
+            $order->tickets()->save($ticket);
         }
 
         return $order;
+    }
+
+    /**
+     *  Add tickets for customers to purchase, in our design a fixed number of
+     *  ticket rows for a concert are created and when a ticket is ordered, an order
+     *  id is assigned to the ticket. This method will add 'blank' tickets.
+     *  @param int $quantity
+     */
+    public function addTickets(int $quantity)
+    {
+        foreach (range(1, $quantity) as $i) {
+            $this->tickets()->create([]);
+        }
+    }
+
+    /**
+     *  Get the remaining tickets
+     */
+    public function ticketsRemaining()
+    {
+        return $this->tickets()->whereNull('order_id')->count();
     }
 }
