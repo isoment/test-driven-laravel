@@ -165,3 +165,26 @@ When we are doing the same thing to set up all our tests in a file we can use...
     }
 
     This will run the setUp() method before every test.
+
+Section 3
+---------
+
+We can catch multiple exceptions like so...
+
+    try {
+        $this->paymentGateway->charge(
+            request('ticket_quantity') * $concert->ticket_price, 
+            request('payment_token')
+        );
+
+        $order = $concert->orderTickets(
+            request('email'), 
+            request('ticket_quantity')
+        );
+
+        return response()->json([], 201);
+    } catch(PaymentFailedException $e) {
+        return response()->json([], 422);
+    } catch (NotEnoughTicketsException $e) {
+        return response()->json([], 422);
+    }

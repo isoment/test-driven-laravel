@@ -41,6 +41,8 @@ class PurchaseTicketsTest extends TestCase
             'ticket_price' => 3250
         ]);
 
+        $concert->addTickets(3);
+
         $response = $this->orderTickets($concert->id, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
@@ -65,6 +67,8 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = Concert::factory()->unpublished()->create();
 
+        $concert->addTickets(3);
+
         $response = $this->orderTickets($concert->id, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
@@ -81,7 +85,7 @@ class PurchaseTicketsTest extends TestCase
      */
     public function cannot_purchase_more_tickets_than_remain()
     {
-        $concert = Concert::factory()->unpublished()->create();
+        $concert = Concert::factory()->published()->create();
         $concert->addTickets(50);
 
         $response = $this->orderTickets($concert->id, [
@@ -188,9 +192,9 @@ class PurchaseTicketsTest extends TestCase
      */
     public function an_order_is_not_created_if_payment_fails()
     {
-        $this->withoutExceptionHandling();
-
         $concert = Concert::factory()->published()->create(['ticket_price' => 3250]);
+
+        $concert->addTickets(3);
 
         $response = $this->orderTickets($concert->id, [
             'email' => 'test@user.com',

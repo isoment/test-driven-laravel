@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,5 +16,14 @@ class Order extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function cancel() : void
+    {
+        foreach ($this->tickets as $ticket) {
+            $ticket->update(['order_id' => NULL]);
+        }
+
+        $this->delete();
     }
 }
