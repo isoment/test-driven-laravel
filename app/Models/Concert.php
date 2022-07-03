@@ -111,8 +111,9 @@ class Concert extends Model
 
     /**
      *  Get the remaining tickets
+     *  @return int
      */
-    public function ticketsRemaining()
+    public function ticketsRemaining() : int
     {
         return $this->tickets()->available()->count();
     }

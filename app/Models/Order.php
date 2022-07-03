@@ -21,7 +21,7 @@ class Order extends Model
     public function cancel() : void
     {
         foreach ($this->tickets as $ticket) {
-            $ticket->update(['order_id' => NULL]);
+            $ticket->release();
         }
 
         $this->delete();
