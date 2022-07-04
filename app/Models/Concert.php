@@ -88,10 +88,8 @@ class Concert extends Model
     }
 
     /**
-     *  We first need to check if there are enough tickets to purchase.
-     *  An order is created with the buyers email. We get a collection of
-     *  the ticket quantity the user wants and then iterate over it assigning
-     *  each ticket to the order.
+     *  Order the tickets the user wants or throw an exception if the tickets
+     *  are not available.
      *  @param string $email
      *  @param int $ticketQuantity
      *  @throws NotEnoughTicketsException
@@ -99,15 +97,40 @@ class Concert extends Model
      */
     public function orderTickets(string $email, int $ticketQuantity) : Order
     {
-        $tickets = $this->tickets()->available()->take($ticketQuantity)->get();
+        $tickets = $this->findTickets($ticketQuantity);
 
-        if ($tickets->count() < $ticketQuantity) {
+        return $this->createOrder($email, $tickets);
+    }
+
+    /**
+     *  We need to check if there are tickets available for the customer to order.
+     *  If there are we will return a collection of the tickets.
+     *  @param int $quantity
+     *  @return Illuminate\Database\Eloquent\Collection
+     */
+    public function findTickets(int $quantity) : Collection
+    {
+        $tickets = $this->tickets()->available()->take($quantity)->get();
+
+        if ($tickets->count() < $quantity) {
             throw new NotEnoughTicketsException;
         }
 
+        return $tickets;
+    }
+
+    /**
+     *  Create an order and loop over the tickets the customer wants updating the blank
+     *  ticket associating it with the users order.
+     *  @param string $email
+     *  @param Illuminate\Database\Eloquent\Collection $tickets
+     *  @return App\Models\Order
+     */
+    public function createOrder(string $email, Collection $tickets) : Order
+    {
         $order = $this->orders()->create([
             'email' => $email,
-            'amount' => $ticketQuantity * $this->ticket_price
+            'amount' => $tickets->count() * $this->ticket_price
         ]);
 
         foreach ($tickets as $ticket) {
