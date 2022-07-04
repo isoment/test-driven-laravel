@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('concert_id');
+            $table->integer('amount');
             $table->string('email');
             $table->timestamps();
         });

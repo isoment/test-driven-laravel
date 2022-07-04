@@ -106,7 +106,8 @@ class Concert extends Model
         }
 
         $order = $this->orders()->create([
-            'email' => $email
+            'email' => $email,
+            'amount' => $ticketQuantity * $this->ticket_price
         ]);
 
         foreach ($tickets as $ticket) {
