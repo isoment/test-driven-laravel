@@ -14,6 +14,11 @@ class Ticket extends Model
 
     protected $guarded = [];
 
+    public function concert()
+    {
+        return $this->belongsTo(Concert::class);
+    }
+
     /**
      *  @param Illuminate\Database\Eloquent\Builder $query
      *  @return Illuminate\Database\Eloquent\Builder
@@ -26,5 +31,15 @@ class Ticket extends Model
     public function release() : void
     {
         $this->update(['order_id' => NULL]);
+    }
+
+    /**
+     *  A computed property for getting the ticket price. Calling $ticket->price
+     *  will run this.
+     *  @return string
+     */
+    public function getPriceAttribute() : string
+    {
+        return $this->concert->ticket_price;
     }
 }

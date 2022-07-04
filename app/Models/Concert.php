@@ -20,9 +20,13 @@ class Concert extends Model
         'date' => 'datetime'
     ];
 
+    /**
+     *  The tickets table is a pivot. Many to many relationship between
+     *  the Order and Concert models.
+     */
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class, 'tickets');
     }
 
     public function tickets()
@@ -128,9 +132,9 @@ class Concert extends Model
      */
     public function createOrder(string $email, Collection $tickets) : Order
     {
-        $order = $this->orders()->create([
+        $order = Order::create([
             'email' => $email,
-            'amount' => $tickets->count() * $this->ticket_price
+            'amount' => $tickets->sum('price')
         ]);
 
         foreach ($tickets as $ticket) {
