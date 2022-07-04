@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Exceptions\NotEnoughTicketsException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,7 +31,26 @@ class Concert extends Model
     }
 
     /**
-     *  Display the date in the fromat of... 'December 13, 2016'
+     *  Determine if the concert has an order from the customer.
+     *  @param string $customerEmail
+     *  @return bool
+     */
+    public function hasOrderFor(string $customerEmail) : bool
+    {
+        return $this->orders()->where('email', $customerEmail)->count() > 0;
+    }
+
+    /**
+     *  @param string $customerEmail
+     *  @return Illuminate\Database\Eloquent\Collection
+     */
+    public function ordersFor(string $customerEmail) : Collection
+    {
+        return $this->orders()->where('email', $customerEmail)->get();
+    }
+
+    /**
+     *  Display the date in the format of... 'December 13, 2016'
      *  A computed property. We can call $concert->formatted_date now.
      *  @return string
      */
@@ -99,14 +119,18 @@ class Concert extends Model
     /**
      *  Add tickets for customers to purchase, in our design a fixed number of
      *  ticket rows for a concert are created and when a ticket is ordered, an order
-     *  id is assigned to the ticket. This method will add 'blank' tickets.
+     *  id is assigned to the ticket. This method will add 'blank' tickets. We also want
+     *  to return the model so we can chain it.
      *  @param int $quantity
+     *  @return App\Models\Concert
      */
-    public function addTickets(int $quantity)
+    public function addTickets(int $quantity) : Concert
     {
         foreach (range(1, $quantity) as $i) {
             $this->tickets()->create([]);
         }
+
+        return $this;
     }
 
     /**

@@ -188,3 +188,13 @@ We can catch multiple exceptions like so...
     } catch (NotEnoughTicketsException $e) {
         return response()->json([], 422);
     }
+
+Often times when testing we have gotten an instance of a model we might to some operation like an update
+and then we want to make an assertion to verify a change. We need to refresh the models state.
+
+    $ticket = $order->tickets()->first();
+    $ticket->release();
+    $this->assertNull($ticket->fresh()->order_id);
+
+To simplify test we can add methods to the models specifically for testing. Some people don't like this
+approach though since these methods have no use except for testing.
