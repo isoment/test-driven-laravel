@@ -23,6 +23,27 @@ class Order extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    /**
+     *  Create an order and loop over the tickets the customer wants updating the blank
+     *  ticket associating it with the users order.
+     *  @param Illuminate\Database\Eloquent\Collection $tickets
+     *  @param string $email
+     *  @return App\Models\Order
+     */
+    public static function forTickets($tickets, $email)
+    {
+        $order = self::create([
+            'email' => $email,
+            'amount' => $tickets->sum('price')
+        ]);
+
+        foreach ($tickets as $ticket) {
+            $order->tickets()->save($ticket);
+        }
+
+        return $order;
+    }
+
     public function cancel() : void
     {
         foreach ($this->tickets as $ticket) {

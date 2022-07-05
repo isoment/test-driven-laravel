@@ -124,24 +124,14 @@ class Concert extends Model
     }
 
     /**
-     *  Create an order and loop over the tickets the customer wants updating the blank
-     *  ticket associating it with the users order.
+     *  Create an order by calling the forTickets() static method on the Order class.
      *  @param string $email
      *  @param Illuminate\Database\Eloquent\Collection $tickets
      *  @return App\Models\Order
      */
     public function createOrder(string $email, Collection $tickets) : Order
     {
-        $order = Order::create([
-            'email' => $email,
-            'amount' => $tickets->sum('price')
-        ]);
-
-        foreach ($tickets as $ticket) {
-            $order->tickets()->save($ticket);
-        }
-
-        return $order;
+        return Order::forTickets($tickets, $email);
     }
 
     /**
