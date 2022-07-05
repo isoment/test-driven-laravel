@@ -32,11 +32,11 @@ class ConcertOrderController extends Controller
             $tickets = $concert->findTickets(request('ticket_quantity'));
 
             $this->paymentGateway->charge(
-                request('ticket_quantity') * $concert->ticket_price, 
+                $tickets->sum('price'), 
                 request('payment_token')
             );
 
-            $order = Order::forTickets($tickets, request('email'));
+            $order = Order::forTickets($tickets, request('email'), $tickets->sum('price'));
     
             return response()->json($order, 201);
 

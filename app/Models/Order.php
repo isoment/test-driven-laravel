@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,13 +29,14 @@ class Order extends Model
      *  ticket associating it with the users order.
      *  @param Illuminate\Database\Eloquent\Collection $tickets
      *  @param string $email
+     *  @param int|null $amount
      *  @return App\Models\Order
      */
-    public static function forTickets($tickets, $email)
+    public static function forTickets(Collection $tickets, string $email, int $amount = null) : Order
     {
         $order = self::create([
             'email' => $email,
-            'amount' => $tickets->sum('price')
+            'amount' => $amount === null ? $tickets->sum('price') : $amount,
         ]);
 
         foreach ($tickets as $ticket) {
