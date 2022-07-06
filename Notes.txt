@@ -166,6 +166,7 @@ When we are doing the same thing to set up all our tests in a file we can use...
 
     This will run the setUp() method before every test.
 
+
 Section 3
 ---------
 
@@ -198,3 +199,27 @@ and then we want to make an assertion to verify a change. We need to refresh the
 
 To simplify test we can add methods to the models specifically for testing. Some people don't like this
 approach though since these methods have no use except for testing.
+
+
+Section 5
+---------
+
+In the ReservationTest...
+
+There are many instances where we are writing unit tests that do not depend on anything from the database.
+Laravel comes with a library called Mockery that allows us to mock out dependencies. So for instance
+we can mock out the ticket class specifying a price. Note that this will not actually work in this case
+since the 'price' is a computed property, which mockery does not support.
+
+    Mockery::mock(Ticket::class, ['price' => 1200]);
+
+In this case we can actually just pass in a regular collection...
+
+    $tickets = collect([
+        (object) ['price' => 1200],
+        (object) ['price' => 1200],
+        (object) ['price' => 1200]
+    ]);
+
+We are type hinting Illuminate\Database\Eloquent\Collection so we need to add a union type for Illuminate\Support\Collection
+just for the test.
