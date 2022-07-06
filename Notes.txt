@@ -239,7 +239,7 @@ already be on the charge stage which when successful can override Customer A's o
 
 We want to be able to write a test for this, but how?
 
-    Laravel supports a feature called subrequests. This allows us to have a request within a request so we can
+    Laravel supports a feature called sub-requests. This allows us to have a request within a request so we can
     mimic this as follows...
 
         Req A: Find tickets for customer A
@@ -249,6 +249,6 @@ We want to be able to write a test for this, but how?
         Req A: Attempt charge of customer A
         Req A: Create an order for customer A
 
-    The application should not allow us to continue in the sub request starting at the step... 
+    The application should not allow us to continue in the sub request past the step... 
     
-        Req B: Attempt charge of customer B
+        Req B: Find tickets for customer B

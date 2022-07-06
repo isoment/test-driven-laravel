@@ -26,7 +26,6 @@ class FakePaymentGatewayTest extends TestCase
     /**
      *  @test
      *  @doesNotPerformAssertions
-     * 
      *  When the payment token is invalid we will expect an exception to be thrown
      *  and we will return. If no exception is thrown the test will fail. This test
      *  does not assert anything so we can add @doesNotPerformAssertions
@@ -41,5 +40,30 @@ class FakePaymentGatewayTest extends TestCase
         }
 
         $this->fail();
+    }
+
+    /**
+     *  @test
+     *  We need some way to make a sub-request so that we can test instances where there
+     *  are multiple users trying to book the sam tickets. We can create a hook in the
+     *  fake payment gateway.
+     */
+    public function running_a_hook_before_the_first_charge()
+    {
+        $paymentGateway = new FakePaymentGateway;
+        $callbackRan = false;
+
+        /*
+            We want to have a beforeFirstCharge method on the payment gateway that accepts
+            a callback. Within the callback we assert that the total charges are 0.
+        */
+        $paymentGateway->beforeFirstCharge(function($paymentGateway) use(&$callbackRan) {
+            $callbackRan = true;
+            $this->assertEquals(0, $paymentGateway->totalCharges());
+        });
+
+        $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+        $this->assertTrue($callbackRan);
+        $this->assertEquals(2500, $paymentGateway->totalCharges());
     }
 }
