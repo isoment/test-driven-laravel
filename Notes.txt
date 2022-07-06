@@ -236,3 +236,19 @@ We have a Reservation class but we aren't doing anything in there to actually re
 Customer A can be at the charge stage if the checkout process hitting the Stripe API. Customer B can still
 come along and want the same tickets as Customer A. Customer A can complete the checkout and then Customer B could
 already be on the charge stage which when successful can override Customer A's order tickets.
+
+We want to be able to write a test for this, but how?
+
+    Laravel supports a feature called subrequests. This allows us to have a request within a request so we can
+    mimic this as follows...
+
+        Req A: Find tickets for customer A
+            Req B: Find tickets for customer B
+            Req B: Attempt charge of customer B
+            Req B: Create an order for customer B
+        Req A: Attempt charge of customer A
+        Req A: Create an order for customer A
+
+    The application should not allow us to continue in the sub request starting at the step... 
+    
+        Req B: Attempt charge of customer B
