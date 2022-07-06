@@ -223,3 +223,16 @@ In this case we can actually just pass in a regular collection...
 
 We are type hinting Illuminate\Database\Eloquent\Collection so we need to add a union type for Illuminate\Support\Collection
 just for the test.
+
+
+Section 6
+---------
+
+At this point we have cleaned up the controller quite a bit but we have introduced a race condition. A race
+condition is when a softwares behavior is dependent on a sequence of events and the resulting behavior
+is undesirable.
+
+We have a Reservation class but we aren't doing anything in there to actually reserve them. So this means that
+Customer A can be at the charge stage if the checkout process hitting the Stripe API. Customer B can still
+come along and want the same tickets as Customer A. Customer A can complete the checkout and then Customer B could
+already be on the charge stage which when successful can override Customer A's order tickets.
