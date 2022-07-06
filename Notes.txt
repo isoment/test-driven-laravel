@@ -252,3 +252,6 @@ We want to be able to write a test for this, but how?
     The application should not allow us to continue in the sub request past the step... 
     
         Req B: Find tickets for customer B
+
+    Since we are using the FakePaymentGateway we can create a hook that will allow us to run a callback before
+    a user is charged.
