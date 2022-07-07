@@ -14,15 +14,14 @@ class PurchaseTicketsTest extends TestCase
 {
     use RefreshDatabase;
 
+    /*
+        When we pass the PaymentGateway interface into the ConcertOrderController the service container 
+        does not know what to resolve. Here we can specify that we resolve the PaymentGateway interface
+        to the FakePaymentGateway
+    */
     protected function setUp() : void
     {
         parent::setUp();
-
-        /*
-            When we pass the PaymentGateway interface into the ConcertOrderController the service container 
-            does not know what to resolve. Here we can specify that we resolve the PaymentGateway interface
-            to the FakePaymentGateway
-        */
         $this->paymentGateway = new FakePaymentGateway;
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
     }
@@ -137,6 +136,8 @@ class PurchaseTicketsTest extends TestCase
      */
     public function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
     {
+        $this->withoutExceptionHandling();
+
         $concert = Concert::factory()
             ->published()
             ->create([
@@ -145,7 +146,7 @@ class PurchaseTicketsTest extends TestCase
             ->addTickets(3);
 
         $this->paymentGateway->beforeFirstCharge(function($paymentGateway) use($concert) {
-            $responseB = $this->orderTickets($concert, [
+            $responseB = $this->orderTickets($concert->id, [
                 'email' => 'personB@example.com',
                 'ticket_quantity' => 1,
                 'payment_token' => $this->paymentGateway->getValidTestToken()

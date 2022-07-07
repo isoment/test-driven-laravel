@@ -33,8 +33,15 @@ class FakePaymentGateway implements PaymentGateway
      */
     public function charge(int $amount, string $token) : void
     {
+        /*
+            To avoid the callback being called infinitely we can assign it to a
+            variable $callback and call this instead of the beforeFirstChargeCallback
+            property of this class.
+        */
         if ($this->beforeFirstChargeCallback !== NULL) {
-            $this->beforeFirstChargeCallback->__invoke($this);
+            $callback = $this->beforeFirstChargeCallback;
+            $this->beforeFirstChargeCallback = NULL;
+            $callback($this);
         }
 
         if ($token !== $this->getValidTestToken()) {
