@@ -146,11 +146,16 @@ class PurchaseTicketsTest extends TestCase
             ->addTickets(3);
 
         $this->paymentGateway->beforeFirstCharge(function($paymentGateway) use($concert) {
+
+            $requestA = $this->app['request'];
+
             $responseB = $this->orderTickets($concert->id, [
                 'email' => 'personB@example.com',
                 'ticket_quantity' => 1,
                 'payment_token' => $this->paymentGateway->getValidTestToken()
             ]);
+
+            $this->app['request'] = $requestA;
 
             $responseB->assertStatus(422);
             $this->assertFalse($concert->hasOrderFor('personB@example.com'));
