@@ -254,4 +254,29 @@ We want to be able to write a test for this, but how?
         Req B: Find tickets for customer B
 
     Since we are using the FakePaymentGateway we can create a hook that will allow us to run a callback before
-    a user is charged.
+    a user is charged. See the FakePaymentGateway and test for how this is done using callbacks.
+
+In a factory there are often times when we want to create a new instance of a different model, for example
+we have a foreign id column and want to create a record for this foreign id.
+
+    In this situation we might want to override this foreign id column when creating a factory when we already
+    have a Model.
+
+        public function definition()
+        {
+            return [
+                'concert_id' => Concert::factory()->create()->id;
+            ];
+        }
+
+    The above will result in a new record being created even if we pass in a concert_id. We can use a callback
+    to ONLY create a new record if we do not pass anything into the factory.
+
+        public function definition()
+        {
+            return [
+                'concert_id' => function() {
+                    return Concert::factory()->create()->id;
+                }
+            ];
+        }

@@ -107,6 +107,14 @@ class Concert extends Model
     }
 
     /**
+     *  @param int $quantity
+     */
+    public function reserveTickets(int $quantity)
+    {
+        return $this->findTickets($quantity);
+    }
+
+    /**
      *  We need to check if there are tickets available for the customer to order.
      *  If there are we will return a collection of the tickets.
      *  @param int $quantity

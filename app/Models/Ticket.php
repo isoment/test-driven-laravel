@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,11 @@ class Ticket extends Model
     public function scopeAvailable(Builder $query) : Builder
     {
         return $query->whereNull('order_id');
+    }
+
+    public function reserve()
+    {
+        $this->update(['reserved_at' => Carbon::now()]);
     }
 
     public function release() : void
