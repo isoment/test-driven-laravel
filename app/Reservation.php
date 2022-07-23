@@ -26,6 +26,11 @@ class Reservation
         return $this->tickets->sum('price');
     }
 
+    public function tickets() : SupportCollection
+    {
+        return $this->tickets;
+    }
+
     public function cancel() : void
     {
         foreach ($this->tickets as $ticket) {
