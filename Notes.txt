@@ -342,13 +342,41 @@ Section 7
 Laravel comes with a library called mockery that can be used for mocking when writing tests. For instance
 we can mock out a class in order to simulate it for testing.
 
-$ticket1 = Mockery::mock(Ticket::class);
-$ticket1->shouldReceive('release')->once();
+    $ticket1 = Mockery::mock(Ticket::class);
+    $ticket1->shouldReceive('release')->once();
 
-$tickets = collect([$ticket1]);
-$reservation = new Reservation($tickets);
+    $tickets = collect([$ticket1]);
+    $reservation = new Reservation($tickets);
 
-$reservation->cancel();
+    $reservation->cancel();
 
-    We create a new mock of the Ticket class and specifying that the Ticket object that is create will call the
-    release method once when the reservation is cancelled.
+We create a new mock of the Ticket class and specifying that the Ticket object that is create will call the
+release method once when the reservation is cancelled. If we were to have many tickets above it could get
+verbose, we can simplify it a bit using...
+
+    $tickets = collect([
+        Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock(),
+        Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock(),
+        Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock()
+    ]);
+    $reservation = new Reservation($tickets);
+
+    $reservation->cancel();
+
+Our tests have generally followed the structure of arrange, act, assert. The above tests does not assert anything
+The mocks are kind of like assertion but they are part of arrangement as well.
+
+Mockery has a spy method which allows us to set up the mock first and then do the assertions.
+
+    $tickets = collect([
+        Mockery::spy(Ticket::class),
+        Mockery::spy(Ticket::class),
+        Mockery::spy(Ticket::class)
+    ]);
+    $reservation = new Reservation($tickets);
+
+    $reservation->cancel();
+
+    foreach ($tickets as $ticket) {
+        $ticket->shouldHaveReceived('release');
+    }
