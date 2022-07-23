@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Reservation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,9 +31,9 @@ class Order extends Model
      *  @param Illuminate\Database\Eloquent\Collection $tickets
      *  @param string $email
      *  @param int|null $amount
-     *  @return App\Models\Order
+     *  @return self
      */
-    public static function forTickets(Collection $tickets, string $email, int $amount = null) : Order
+    public static function forTickets(Collection $tickets, string $email, int $amount = null) : self
     {
         $order = self::create([
             'email' => $email,
@@ -42,6 +43,22 @@ class Order extends Model
         foreach ($tickets as $ticket) {
             $order->tickets()->save($ticket);
         }
+
+        return $order;
+    }
+
+    /**
+     *  @param App\Reservation $reservation
+     *  @return self
+     */
+    public static function fromReservation(Reservation $reservation) : self
+    {
+        $order = self::create([
+            'email' => $reservation->email(),
+            'amount' => $reservation->totalCost(),
+        ]);
+
+        $order->tickets()->saveMany($reservation->tickets());
 
         return $order;
     }
