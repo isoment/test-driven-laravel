@@ -46,15 +46,6 @@ class Order extends Model
         return $order;
     }
 
-    public function cancel() : void
-    {
-        foreach ($this->tickets as $ticket) {
-            $ticket->release();
-        }
-
-        $this->delete();
-    }
-
     public function ticketQuantity() : int
     {
         return $this->tickets()->count();
@@ -63,7 +54,7 @@ class Order extends Model
     /**
      *  Override the default toArray method for the Order Model
      */
-    public function toArray()
+    public function toArray() : array
     {
         return [
             'email' => $this->email,
