@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Concert;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,5 +23,18 @@ class TicketFactory extends Factory
                 return Concert::factory()->create()->id;
             }
         ];
+    }
+
+    /**
+     *  Set the ticket to reserved.
+     *  @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function reserved() : Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'reserved_at' => Carbon::now(),
+            ];
+        });
     }
 }
