@@ -120,6 +120,7 @@ class Concert extends Model
      *  We need to check if there are tickets available for the customer to order.
      *  If there are we will return a collection of the tickets.
      *  @param int $quantity
+     *  @throws App\Exceptions\NotEnoughTicketsException
      *  @return Illuminate\Database\Eloquent\Collection
      */
     public function findTickets(int $quantity) : Collection

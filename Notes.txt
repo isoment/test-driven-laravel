@@ -334,3 +334,21 @@ a request within a request as outlined above. The test is failing without the
 
         This can be fixed by backing up and then manually setting the request in the service container
         using the two lines above.
+
+
+Section 7
+---------
+
+Laravel comes with a library called mockery that can be used for mocking when writing tests. For instance
+we can mock out a class in order to simulate it for testing.
+
+$ticket1 = Mockery::mock(Ticket::class);
+$ticket1->shouldReceive('release')->once();
+
+$tickets = collect([$ticket1]);
+$reservation = new Reservation($tickets);
+
+$reservation->cancel();
+
+    We create a new mock of the Ticket class and specifying that the Ticket object that is create will call the
+    release method once when the reservation is cancelled.
