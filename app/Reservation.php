@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 
@@ -28,6 +29,9 @@ class Reservation
         return $this->tickets->sum('price');
     }
 
+    /**
+     *  @return SupportCollection|Collection
+     */
     public function tickets() : SupportCollection|Collection
     {
         return $this->tickets;
@@ -36,6 +40,18 @@ class Reservation
     public function email() : string
     {
         return $this->email;
+    }
+
+    /**
+     *  @return App\Models\Order
+     */
+    public function complete() : Order
+    {
+        return Order::forTickets(
+            $this->tickets(), 
+            $this->email(), 
+            $this->totalCost()
+        );
     }
 
     public function cancel() : void

@@ -47,22 +47,6 @@ class Order extends Model
         return $order;
     }
 
-    /**
-     *  @param App\Reservation $reservation
-     *  @return self
-     */
-    public static function fromReservation(Reservation $reservation) : self
-    {
-        $order = self::create([
-            'email' => $reservation->email(),
-            'amount' => $reservation->totalCost(),
-        ]);
-
-        $order->tickets()->saveMany($reservation->tickets());
-
-        return $order;
-    }
-
     public function ticketQuantity() : int
     {
         return $this->tickets()->count();

@@ -475,3 +475,5 @@ So the problem here can be thought of in both ways but it if we think of it more
 we can improve the architecture more. Ideally we would like to do something like...
 
     $order = $reservation->complete();
+
+Sometimes if we get an SQL order when running a test it means we just need to use the RefreshDatabase trait.
