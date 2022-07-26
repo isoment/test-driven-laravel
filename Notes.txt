@@ -493,3 +493,58 @@ classes we define that handles some request and encapsulates business logic and 
     The service class is really only manipulating other classes.
 
     The downside of service classes is that they are not very object oriented, they feel procedural.
+
+
+Section 9
+---------
+
+Stripe has a PHP library and API that we are going to start integrating into our application.
+
+Stripe has a create card token which allows us to pass in a credit cards details and return a
+created token.
+
+    $stripe = new \Stripe\StripeClient(<key>);
+
+    $token = $stripe->tokens->create([
+        'card' => [
+            'number' => '4242424242424242',
+            'exp_month' => 7,
+            'exp_year' => 2023,
+            'cvc' => '314',
+        ],
+    ]);
+
+    If we dump the above we can see that there is a lot of information returned but the thing we are looking
+    for is the part...
+
+        "id" => "tok_1LPqyLCrhN5LNYWTolI4WodP"
+
+We want to add the following entries to the env files...
+
+    STRIPE_SECRET=
+    STRIPE_KEY=
+
+And then in the services.php file we can add...
+
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET')
+    ]
+
+Adn now we can access the keys anywhere within the application using...
+
+    config('services.stripe.secret')
+
+Instead of passing the key in when creating the stripe instance we can pass it in for just the request instead
+of passing it in to the global state...
+
+    $stripe = new \Stripe\StripeClient();
+
+    $token = $stripe->tokens->create([
+        'card' => [
+            'number' => '4242424242424242',
+            'exp_month' => 7,
+            'exp_year' => 2023,
+            'cvc' => '314',
+        ],
+    ], ['api_key' => config('services.stripe.secret')]);
