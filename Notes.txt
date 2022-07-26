@@ -477,3 +477,19 @@ we can improve the architecture more. Ideally we would like to do something like
     $order = $reservation->complete();
 
 Sometimes if we get an SQL order when running a test it means we just need to use the RefreshDatabase trait.
+
+The goal is to keep business logic out of the controllers. We can put it in service classes. Service classes are
+classes we define that handles some request and encapsulates business logic and persistence away from the action.
+
+    A service class should not do a lot of the work like database access directly but defers to individual classes
+    like a User, Order, Inventory class or whatever other classes we may have that implement the lower level
+    functionality.
+
+    When we are doing something like a Purchase we need to probably need to take a lot of steps like creating
+    an order, charging, calculating shipping, modifying the inventory etc. We don't want to cram all of that
+    logic into a single class so we can create a PurchaseService that ties a lot of these smaller actions
+    together.
+
+    The service class is really only manipulating other classes.
+
+    The downside of service classes is that they are not very object oriented, they feel procedural.

@@ -22,7 +22,7 @@ class FakePaymentGateway implements PaymentGateway
      */
     public function getValidTestToken() : string
     {
-        return 'Valid Token';
+        return 'valid-token';
     }
 
     /**
@@ -62,7 +62,7 @@ class FakePaymentGateway implements PaymentGateway
 
     /**
      *  A hook to call some logic before we charge a customer. We can use this
-     *  to initiate a request.
+     *  to initiate a request for testing.
      *  @param callable $callback
      */
     public function beforeFirstCharge(callable $callback)
