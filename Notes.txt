@@ -503,7 +503,7 @@ Stripe has a PHP library and API that we are going to start integrating into our
 Stripe has a create card token which allows us to pass in a credit cards details and return a
 created token.
 
-    $stripe = new \Stripe\StripeClient(<key>);
+    $stripe = new \Stripe\StripeClient(<STRIPE_SECRET>);
 
     $token = $stripe->tokens->create([
         'card' => [
@@ -548,3 +548,9 @@ of passing it in to the global state...
             'cvc' => '314',
         ],
     ], ['api_key' => config('services.stripe.secret')]);
+
+Stripe has a method for getting a given amount of previous charges, for example getting the last three charges...
+
+    $stripe = new \Stripe\StripeClient(<STRIPE_SECRET>);
+
+    $stripe->charges->all(['limit' => 3]);
