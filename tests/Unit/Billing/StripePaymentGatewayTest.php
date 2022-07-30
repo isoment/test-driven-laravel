@@ -5,6 +5,9 @@ namespace Tests\Unit\Billing;
 use App\Billing\StripePaymentGateway;
 use Tests\TestCase;
 
+/**
+ *  @group integration
+ */
 class StripePaymentGatewayTest extends TestCase
 {
     /**

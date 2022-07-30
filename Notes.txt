@@ -569,3 +569,17 @@ There are several cons however...
     If stripe makes a change our tests can't be used to confirm our code still works.
 
     Tests become coupled to a specific implementation
+
+We can get around the issue of our Stripe test requiring the internet and being slow by using groups to skip
+integration tests like this. In this context the term integration means any test that is testing the integration
+with some external service.
+
+We can define groups in the comments using the following syntax. We can mark methods or classes...
+
+    /**
+    *  @group integration
+    */
+
+Now when we run the following command these tests will be excluded...
+
+    php artisan test --exclude-group integration
