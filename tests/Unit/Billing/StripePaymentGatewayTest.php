@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Billing;
 
+use App\Billing\PaymentFailedException;
 use App\Billing\StripePaymentGateway;
 use Tests\TestCase;
 
@@ -32,6 +33,26 @@ class StripePaymentGatewayTest extends TestCase
     }
 
     /**
+     *  @test
+     */
+    public function charges_with_an_invalid_payment_token_fail()
+    {
+        $stripe = new \Stripe\StripeClient();
+
+        $lastCharge = $this->lastCharge($stripe);
+
+        try {
+            $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
+            $paymentGateway->charge(2500, 'invalid-payment-token');
+        } catch(PaymentFailedException $e) {
+            $this->assertCount(0, $this->newCharges($stripe, $lastCharge));
+            return;
+        }
+
+        $this->fail("Charging with an invalid payment token did not throw a PaymentFailedException");
+    }
+
+    /**
      *  We want to get the last charge in order to determine our starting point when asserting
      *  against the new charge.
      *  @param \Stripe\StripeClient $stripe
@@ -46,9 +67,7 @@ class StripePaymentGatewayTest extends TestCase
     }
 
     /**
-     *  Verify that the charge was completed successfully, since stripe keeps a record
-     *  of all the previous charges we want to ensure that we are checking against this
-     *  new charge not one of the older ones.
+     *  Get all the new charges after the specified charge id
      *  @param \Stripe\StripeClient $stripe
      *  @param \Stripe\Charge $endingBefore
      *  @return array
