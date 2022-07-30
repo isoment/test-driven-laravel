@@ -62,7 +62,7 @@ class StripePaymentGatewayTest extends TestCase
     }
 
     /**
-     *  We need to get a valid stripe payment token in order to charge
+     *  We need to get a valid stripe payment token in order to make charges charge
      *  @param \Stripe\StripeClient $stripe
      *  @return string
      */

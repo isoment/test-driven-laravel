@@ -554,3 +554,18 @@ Stripe has a method for getting a given amount of previous charges, for example 
     $stripe = new \Stripe\StripeClient(<STRIPE_SECRET>);
 
     $stripe->charges->all(['limit' => 3]);
+
+When we are running the StripePaymentGatewayTest it has to connect to stripes servers. Notice that the tests run 
+slow. The alternative would be to mock out the stripe library when testing.
+
+Mocking the stripe API has some advantages...
+
+    Testing is fast and run without internet access.
+
+There are several cons however...
+
+    Tests will pass even if we are not using Strip correctly
+
+    If stripe makes a change our tests can't be used to confirm our code still works.
+
+    Tests become coupled to a specific implementation
