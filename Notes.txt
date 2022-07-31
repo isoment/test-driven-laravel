@@ -583,3 +583,24 @@ We can define groups in the comments using the following syntax. We can mark met
 Now when we run the following command these tests will be excluded...
 
     php artisan test --exclude-group integration
+
+We need to configure laravel to tell the application which payment gateway we want to use since we have both the
+Stripe gateway and also a dummy gateway.
+
+We can open the AppServiceProvider.php file and add the following to the register() method...
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // We tell laravel which payment gateway to use and how to construct it.
+        $this->app->bind(StripePaymentGateway::class, function() {
+            return new StripePaymentGateway(config('services.stripe.secret'));
+        });
+
+        // Anytime something asks for the PaymentGateway interface provide the StripePaymentGateway
+        $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
+    }
