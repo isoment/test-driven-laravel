@@ -9,8 +9,7 @@
 </head>
 <body>
     <div id="app">
-        <h1 class="header-color">Hello There!</h1>
-        <welcome/>
+        @yield('body')
     </div>
     <script src="{{ mix('js/app.js') }}" defer></script>
 </body>
