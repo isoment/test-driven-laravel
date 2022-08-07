@@ -7,7 +7,7 @@
             Price
           </label>
           <span class="form-control-static">
-            ${{ priceInDollars }}
+            ${{ totalPriceInDollars }}
           </span>
         </h4>
       </div>
@@ -23,10 +23,15 @@
     <div class="border p-2 rounded">
       <div id="payment-card"></div>
     </div>
-    <div class="text-right w-full mt-4">
+    <div class="text-center w-full mt-4">
+      <div class="spinner-border text-primary" role="status" v-if="processing">
+        <span class="sr-only">Loading...</span>
+      </div>
       <button class="btn btn-primary btn-block"
               :class="{ 'btn-loading': processing }"
               :disabled="processing"
+              v-else
+              @click="processPayment()"
       >
         Buy Tickets
       </button>
@@ -47,22 +52,20 @@ export default {
         quantity: 1,
         processing: false,
         stripe: null,
+        card: null,
+        cardErrors: null
     };
   },
 
   computed: {
-    description() {
-        if (this.quantity > 1) {
-            return `${this.quantity} tickets to ${this.concertTitle}`;
-        }
-        return `One ticket to ${this.concertTitle}`;
-    },
     totalPrice() {
         return this.quantity * this.price;
     },
+
     priceInDollars() {
         return (this.price / 100).toFixed(2);
     },
+
     totalPriceInDollars() {
         return (this.totalPrice / 100).toFixed(2);
     },
@@ -103,7 +106,25 @@ export default {
         },
       });
 
+      this.card = card;
       card.mount('#payment-card');
+    },
+
+    async processPayment() {
+      this.processing = true;
+      paymentToken = null;
+
+      try {
+        const result = await this.stripe.createToken(this.card);
+        if (result.error) {
+          this.cardErrors = result.error.message;
+        }
+        paymentToken = result.token.id;
+      } catch(error) {
+        console.log(error);
+      }
+
+      this.processing = false;
     }
   }
 };

@@ -12,7 +12,7 @@
         <div class="col-md">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title text-dark font-weight-bold">{{ $concert->venue }}</h3>
+                    <h3 class="card-title text-dark font-weight-bold text-center my-2">{{ $concert->venue }}</h3>
                     <div class="my-4 text-primary">
                         <h5>{{ $concert->formatted_date }}</h5>
                         <h5>{{ $concert->formatted_start_time }}</h5>
