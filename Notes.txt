@@ -604,3 +604,21 @@ We can open the AppServiceProvider.php file and add the following to the registe
         // Anytime something asks for the PaymentGateway interface provide the StripePaymentGateway
         $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
     }
+
+
+Section 10
+----------
+
+Right now we have a FakePaymentGateway and a real stripe payment gateway. We could have a situation where
+we update how the charge method deals with errors, let's say that it no longer throws an exception and just
+returns false. Since we are still using the fake gateway in many tests they will still pass. Our tests are
+no longer giving us an accurate picture.
+
+    This is a limitation of interfaces. We need a type of test to test how all payment gateways are supposed
+    to work.
+
+    A contract test takes a shared set of tests and applies those tests to many implementations of the
+    same interface. We can test that all of the different implementations function correctly from the
+    perspective of the rest of the application.
+
+    The idea is that we have a single test to cover multiple implementations of an interface.
