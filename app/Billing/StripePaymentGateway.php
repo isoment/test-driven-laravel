@@ -33,4 +33,23 @@ class StripePaymentGateway implements PaymentGateway
             throw new PaymentFailedException;
         }
     }
+
+    /**
+     *  We need to get a valid stripe payment token in order to make charges charge
+     *  @param \Stripe\StripeClient $stripe
+     *  @return string
+     */
+    public function getValidTestToken() : string
+    {
+        $stripe = new \Stripe\StripeClient();
+
+        return $stripe->tokens->create([
+            'card' => [
+                'number' => '4242424242424242',
+                'exp_month' => 1,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
+            ],
+        ], ['api_key' => $this->apiKey])->id;
+    }
 }
