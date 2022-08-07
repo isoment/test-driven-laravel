@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Billing;
 
+use Illuminate\Support\Collection;
+
 class StripePaymentGateway implements PaymentGateway
 {
     private string $apiKey;
+    private \Stripe\StripeClient $stripe;
 
     public function __construct($apiKey)
     {
         $this->apiKey = $apiKey;
+        $this->stripe = new \Stripe\StripeClient();
     }
 
     /**
@@ -21,10 +25,8 @@ class StripePaymentGateway implements PaymentGateway
      */
     public function charge(int $amount, string $token): void
     {
-        $stripe = new \Stripe\StripeClient();
-
         try {
-            $stripe->charges->create([
+            $this->stripe->charges->create([
                 'amount' => $amount,
                 'currency' => 'usd',
                 'source' => $token
@@ -36,14 +38,11 @@ class StripePaymentGateway implements PaymentGateway
 
     /**
      *  We need to get a valid stripe payment token in order to make charges
-     *  @param \Stripe\StripeClient $stripe
      *  @return string
      */
     public function getValidTestToken() : string
     {
-        $stripe = new \Stripe\StripeClient();
-
-        return $stripe->tokens->create([
+        return $this->stripe->tokens->create([
             'card' => [
                 'number' => '4242424242424242',
                 'exp_month' => 1,
@@ -54,9 +53,14 @@ class StripePaymentGateway implements PaymentGateway
     }
 
     /**
+     *  We are passing in a callback where we are performing some charges. We only want
+     *  to return the charges performed in the callback. We do this by getting the latest
+     *  charge, executing the callback and then returning a collection of charges that were
+     *  performed in the callback
      *  @param callable $callback
+     *  @return Illuminate\Support\Collection
      */
-    public function newChargesDuring(callable $callback)
+    public function newChargesDuring(callable $callback) : Collection
     {
         $latestCharge = $this->lastCharge();
 
@@ -72,9 +76,7 @@ class StripePaymentGateway implements PaymentGateway
      */
     private function lastCharge()
     {
-        $stripe = new \Stripe\StripeClient();
-
-        return $stripe->charges->all(
+        return $this->stripe->charges->all(
             ['limit' => 1],
             ['api_key' => $this->apiKey]
         )['data'][0];
@@ -85,9 +87,7 @@ class StripePaymentGateway implements PaymentGateway
      */
     private function newChargesSince($charge = null)
     {
-        $stripe = new \Stripe\StripeClient();
-
-        $newCharges = $stripe->charges->all(
+        $newCharges = $this->stripe->charges->all(
             [
                 'ending_before' => $charge ? $charge->id : null,
             ],

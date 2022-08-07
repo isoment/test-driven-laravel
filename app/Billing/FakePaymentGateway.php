@@ -52,6 +52,24 @@ class FakePaymentGateway implements PaymentGateway
     }
 
     /**
+     *  We are passing in a callback where we are performing some charges. We only want
+     *  to return the charges performed in the callback. We can slice the charges collection
+     *  using the count of the charges before the callback. This returns only the charges
+     *  done in the callback. We need to call values() on the collection since slice() will
+     *  not rekey the new collection.
+     *  @param callable $callback
+     *  @return Illuminate\Support\Collection
+     */
+    public function newChargesDuring(callable $callback) : Collection
+    {
+        $chargesFrom = $this->charges->count();
+
+        $callback();
+
+        return $this->charges->slice($chargesFrom)->values();
+    }
+
+    /**
      *  Sum the individual charges
      *  @return int
      */
@@ -65,7 +83,7 @@ class FakePaymentGateway implements PaymentGateway
      *  to initiate a request for testing.
      *  @param callable $callback
      */
-    public function beforeFirstCharge(callable $callback)
+    public function beforeFirstCharge(callable $callback) : void
     {
         $this->beforeFirstChargeCallback = $callback;
     }
