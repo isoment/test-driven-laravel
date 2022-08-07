@@ -4,8 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Concert;
 use App\Models\Order;
-use App\Models\Ticket;
-use App\Reservation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

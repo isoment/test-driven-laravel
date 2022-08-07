@@ -42,9 +42,8 @@ class Ticket extends Model
     /**
      *  A computed property for getting the ticket price. Calling $ticket->price
      *  will run this.
-     *  @return string
      */
-    public function getPriceAttribute() : string
+    public function getPriceAttribute()
     {
         return $this->concert->ticket_price;
     }
