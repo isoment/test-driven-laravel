@@ -622,3 +622,6 @@ no longer giving us an accurate picture.
     perspective of the rest of the application.
 
     The idea is that we have a single test to cover multiple implementations of an interface.
+
+On a PHP trait we can define an abstract method. This will ensure that any classes that use the trait must 
+have a method with this name.
