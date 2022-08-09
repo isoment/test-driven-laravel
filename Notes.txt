@@ -625,3 +625,9 @@ no longer giving us an accurate picture.
 
 On a PHP trait we can define an abstract method. This will ensure that any classes that use the trait must 
 have a method with this name.
+
+When we have a test that does not perform any assertions we can suppress the PHPUnit warning by including
+the following in the comments...
+
+    @doesNotPerformAssertions
+
