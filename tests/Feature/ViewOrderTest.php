@@ -23,7 +23,9 @@ class ViewOrderTest extends TestCase
         $concert = Concert::factory()->create();
 
         // Create an order
-        $order = Order::factory()->create();
+        $order = Order::factory()->create([
+            'confirmation_number' => 'ORDERCONFIRMATION1234'
+        ]);
 
         // Create a ticket
         $ticket = Ticket::factory()->create([
@@ -32,7 +34,9 @@ class ViewOrderTest extends TestCase
         ]);
 
         // Visit the order confirmation page
-        $this->get("/orders/{$order->id}");
+        $response = $this->get("/orders/ORDERCONFIRMATION1234");
+        
+        $response->assertStatus(200);
 
         // Assert we see the correct order details
     }
