@@ -631,3 +631,25 @@ the following in the comments...
 
     @doesNotPerformAssertions
 
+
+Section 12
+----------
+
+There is a useful testing assertion that laravel has called assertViewHas()
+
+    $order = Order::factory()->create([
+        'confirmation_number' => 'ORDERCONFIRMATION1234'
+    ]);
+
+    $response->assertViewHas('order', $order);
+
+We can use this to test that we are getting the correct order passed to the view. The first argument
+is the name of the variable that was passed to the view. The second argument is what we want the variable
+passed into the view to be equal to.
+
+This assertion can also accept a closure. Here we are order that was passed into the view to the $order
+we create in our test.
+
+    $response->assertViewHas('order', function($viewOrder) use($order) {
+        return $order->id === $viewOrder->id;
+    });

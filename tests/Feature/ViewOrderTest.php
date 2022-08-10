@@ -39,5 +39,6 @@ class ViewOrderTest extends TestCase
         $response->assertStatus(200);
 
         // Assert we see the correct order details
+        $response->assertViewHas('order', $order);
     }
 }
