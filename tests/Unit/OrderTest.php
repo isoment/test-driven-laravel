@@ -44,6 +44,7 @@ class OrderTest extends TestCase
 
     /**
      *  @test
+     *  @doesNotPerformAssertions
      */
     public function retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
     {

@@ -665,3 +665,12 @@ tag...
 
 We can attach a special attribute to the tag and use a consistent generic date format we can test against. The
 user will not see this on the screen and only see the readable date within the tags.
+
+
+Section 13
+----------
+
+When running tests with either the phpunit or artisan command we can use the following flag to stop the tests
+on the very first failure.
+
+    --stop-on-failure
