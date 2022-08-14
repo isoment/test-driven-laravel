@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Billing\FakePaymentGateway;
 use App\Billing\PaymentGateway;
 use App\Models\Concert;
+use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
+use Mockery;
 use Tests\TestCase;
 
 class PurchaseTicketsTest extends TestCase
@@ -36,6 +38,16 @@ class PurchaseTicketsTest extends TestCase
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
+        $this->withExceptionHandling();
+
+        // Create a mock of OrderConfirmationNumberGenerator that will always return ORDERCONFIRMATION1234.
+        $orderConfirmationNumberGenerator = Mockery::mock(OrderConfirmationNumberGenerator::class, [
+            'generate' => 'ORDERCONFIRMATION1234'
+        ]);
+
+        // Resolve our mock on the service container.
+        $this->app->instance(OrderConfirmationNumberGenerator::class, $orderConfirmationNumberGenerator);
+
         $concert = Concert::factory()
             ->published()
             ->create([
