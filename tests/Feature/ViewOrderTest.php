@@ -20,7 +20,9 @@ class ViewOrderTest extends TestCase
     public function user_can_view_their_order_confirmation()
     {
         // Create a concert
-        $concert = Concert::factory()->create();
+        $concert = Concert::factory()->create([
+            'date' => '2022-08-21 18:00:00'
+        ]);
 
         // Create an order
         $order = Order::factory()->create([
@@ -56,5 +58,14 @@ class ViewOrderTest extends TestCase
         $response->assertSee('**** **** **** 1881');
         $response->assertSee('TICKETCODE123');
         $response->assertSee('TICKETCODE456');
+        $response->assertSee('Example Band');
+        $response->assertSee('With the Fake Openers');
+        $response->assertSee('The Example Theatre');
+        $response->assertSee('123 Example Ln');
+        $response->assertSee('Fakeville');
+        $response->assertSee('NY');
+        $response->assertSee('90210');
+        $response->assertSee('somebody@example.com');
+        $response->assertSee('2022-08-21 18:00');
     }
 }

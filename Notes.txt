@@ -653,3 +653,15 @@ we create in our test.
     $response->assertViewHas('order', function($viewOrder) use($order) {
         return $order->id === $viewOrder->id;
     });
+
+When testing a view or response we often want to verify that it contains a date. Sometimes we want this date
+to be displayed in a very specific. In cases where it is displayed on a page for a user we might want to change
+the way it is displayed later on. Then the test will break. To solve this problem we can use a special html
+tag...
+
+    <time datetime="{{ $var->date->format('Y-m-d H:i')}}">
+        datetime="{{ $var->date->format('User readable format')}}"
+    </time>
+
+We can attach a special attribute to the tag and use a consistent generic date format we can test against. The
+user will not see this on the screen and only see the readable date within the tags.

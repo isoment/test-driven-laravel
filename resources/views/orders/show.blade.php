@@ -22,8 +22,8 @@
                 <div class="card-header bg-secondary text-white">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="text-left">
-                        <h4 class="mb-0">Concert Title</h4>
-                        <p class="mb-0">Opening acts</p>
+                        <h4 class="mb-0">{{ $ticket->concert->title }}</h4>
+                        <p class="mb-0">{{ $ticket->concert->subtitle }}</p>
                     </div>
                     <div class="text-right">
                         <h6 class="font-weight-bold mb-0">General Admission</h6>
@@ -33,13 +33,15 @@
                 </div>
                 <div class="card-body d-flex justify-content-around align-items-start">
                     <div>
-                        <h4 class="mb-3">Music Hall of Sound</h4>
-                        <p class="mb-0">123 Main St. W</p>
-                        <p>City, State 47678</p>
+                        <h4 class="mb-3">{{ $ticket->concert->venue }}</h4>
+                        <p class="mb-0">{{ $ticket->concert->venue_address }}</p>
+                        <p>{{ $ticket->concert->city }}, {{ $ticket->concert->state }} {{ $ticket->concert->zip }}</p>
                     </div>
                     <div>
-                        Sunday, September 15, 2022
-                        <p>Doors ar 8:00PM</p>
+                        <time datetime="{{ $ticket->concert->date->format('Y-m-d H:i') }}">
+                            {{ $ticket->concert->date->format('l, F j, Y') }}
+                        </time>
+                        <p>Doors at {{ $ticket->concert->date->format('g:ia') }}</p>
                     </div>
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-between align-items-center">
@@ -47,7 +49,7 @@
                     {{ $ticket->code }}
                 </div>
                 <div>
-                    test@example.com
+                    {{ $ticket->order->email }}
                 </div>
                 </div>
             </div>

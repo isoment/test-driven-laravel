@@ -20,6 +20,11 @@ class Ticket extends Model
         return $this->belongsTo(Concert::class);
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
     /**
      *  @param Illuminate\Database\Eloquent\Builder $query
      *  @return Illuminate\Database\Eloquent\Builder
