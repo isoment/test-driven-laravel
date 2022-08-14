@@ -4,7 +4,10 @@
     <div class="container">
         <div class="mt-3 d-flex justify-content-between align-items-center">
             <h3>Order Summary</h3>
-            <h6 class="text-secondary">{{$order->confirmation_number}}</h6>
+            <a class="text-secondary" 
+               href="{{ url("/orders/{$order->confirmation_number}") }}">
+               {{$order->confirmation_number}}
+            </a>
         </div>
         <hr>
         <div class="my-2">

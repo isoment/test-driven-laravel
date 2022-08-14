@@ -30,14 +30,14 @@ class ViewOrderTest extends TestCase
         ]);
 
         // Ticket A
-        $ticketA = Ticket::factory()->create([
+        Ticket::factory()->create([
             'concert_id' => $concert->id,
             'order_id' => $order->id,
             'code' => 'TICKETCODE123'
         ]);
 
         // Ticket B
-        $ticketB = Ticket::factory()->create([
+        Ticket::factory()->create([
             'concert_id' => $concert->id,
             'order_id' => $order->id,
             'code' => 'TICKETCODE456'
