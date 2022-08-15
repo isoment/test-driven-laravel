@@ -674,3 +674,7 @@ When running tests with either the phpunit or artisan command we can use the fol
 on the very first failure.
 
     --stop-on-failure
+
+We can run an individual test using...
+
+    php artisan test --filter test_method_name
