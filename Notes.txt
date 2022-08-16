@@ -678,3 +678,59 @@ on the very first failure.
 We can run an individual test using...
 
     php artisan test --filter test_method_name
+
+In Orders.php when we want to use an instance of the OrderConfirmationNumberGenerator interface we can use the
+laravel service container to resolve it...
+
+    public static function forTickets(...)
+    {
+        $order = self::create([
+            'confirmation_number' => app(OrderConfirmationNumberGenerator::class)->generate(),
+            'email' => $email,
+            'amount' => $amount === null ? $tickets->sum('price') : $amount,
+        ]);
+
+        ...
+    }
+
+However it would be nicer if we could have a simpler way to do this. Laravel has facades built in. We can
+leverage this to convert the above into a nicer static syntax...
+
+    OrderConfirmationNumber::generate();
+
+Normally we could just create a static method but since we are using an interface 'OrderConfirmationNumberGenerator'
+so we can have different implementations of the confirmation number generator for testing and production this
+won't work.
+
+We can instead create our own facade...
+
+    <?php
+
+    namespace App\Facades;
+
+    use App\OrderConfirmationNumberGenerator;
+    use Illuminate\Support\Facades\Facade;
+
+    class OrderConfirmationNumber extends Facade
+    {
+        protected static function getFacadeAccessor()
+        {
+            return OrderConfirmationNumberGenerator::class;
+        }
+    }
+
+Now we can call...
+
+    public static function forTickets(...)
+    {
+        $order = self::create([
+            'confirmation_number' => OrderConfirmationNumber::generate(),
+            'email' => $email,
+            'amount' => $amount === null ? $tickets->sum('price') : $amount,
+        ]);
+
+        ...
+    }
+
+And our facade will have access to the generate method of our interface and all the resolution will be handled
+by the service container. It just looks a little cleaner now.
