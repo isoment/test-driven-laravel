@@ -5,24 +5,32 @@ declare(strict_types=1);
 namespace App\Billing;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FakePaymentGateway implements PaymentGateway
 {
     private Collection $charges;
+    private Collection $tokens;
     private $beforeFirstChargeCallback;
 
     public function __construct()
     {
         $this->charges = collect();
+        $this->tokens = collect();
     }
 
     /**
-     *  A dummy test token
+     *  We provide a fake card number and get back a fake token
+     *  In our tokens collection the token will be the key and the card number
+     *  will be the value.
+     *  @param string $cardNumber
      *  @return string
      */
-    public function getValidTestToken() : string
+    public function getValidTestToken($cardNumber = '4242424242424242') : string
     {
-        return 'valid-token';
+        $token = 'fake-tok_' . Str::random(24);
+        $this->tokens[$token] = $cardNumber;
+        return $token;
     }
 
     /**
@@ -31,7 +39,7 @@ class FakePaymentGateway implements PaymentGateway
      *  @param string $token
      *  @return void
      */
-    public function charge(int $amount, string $token) : void
+    public function charge(int $amount, string $token)
     {
         /*
             To avoid the callback being called infinitely we can assign it to a
@@ -44,11 +52,14 @@ class FakePaymentGateway implements PaymentGateway
             $callback($this);
         }
 
-        if ($token !== $this->getValidTestToken()) {
+        if (!$this->tokens->has($token)) {
             throw new PaymentFailedException;
         }
 
-        $this->charges[] = $amount;
+        return $this->charges[] = new Charge([
+            'amount' => $amount,
+            'card_last_four' => substr($this->tokens[$token], -4),
+        ]);
     }
 
     /**
@@ -76,7 +87,7 @@ class FakePaymentGateway implements PaymentGateway
      */
     public function totalCharges() : int
     {
-        return $this->charges->sum();
+        return $this->charges->map->amount()->sum();
     }
 
     /**

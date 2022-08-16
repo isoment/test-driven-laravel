@@ -679,6 +679,10 @@ We can run an individual test using...
 
     php artisan test --filter test_method_name
 
+We can run tests that only contain the word details...
+
+    php artisan test --filter=details
+
 In Orders.php when we want to use an instance of the OrderConfirmationNumberGenerator interface we can use the
 laravel service container to resolve it...
 
@@ -693,7 +697,8 @@ laravel service container to resolve it...
         ...
     }
 
-However it would be nicer if we could have a simpler way to do this. Laravel has facades built in. We can
+However it would be nicer if we could have a simpler way to do this. Laravel has facades built in. Facades
+provide a static interface to classes that are available in the application service container. We can
 leverage this to convert the above into a nicer static syntax...
 
     OrderConfirmationNumber::generate();
@@ -734,3 +739,15 @@ Now we can call...
 
 And our facade will have access to the generate method of our interface and all the resolution will be handled
 by the service container. It just looks a little cleaner now.
+
+
+Section 14
+----------
+
+Laravel supports higher order messages for collections. This allows us to use map in a one liner.
+
+    return $this->charges->map->amount()->sum();
+
+In the above line we have a charges collection. We can map over each item in the collection. In this case
+each item in the collection is a Charge object, we can then call the amount() method to get the charge amount
+and then sum() to get the sum of all the charges in the collection.

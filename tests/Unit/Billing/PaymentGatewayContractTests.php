@@ -4,6 +4,8 @@ namespace Tests\Unit\Billing;
 
 use App\Billing\PaymentFailedException;
 
+use function PHPUnit\Framework\assertEquals;
+
 trait PaymentGatewayContractTests
 {
     abstract protected function getPaymentGateway();
@@ -24,7 +26,20 @@ trait PaymentGatewayContractTests
         $this->assertCount(1, $newCharges);
 
         // Assert that the most recent charge is for the correct amount
-        $this->assertEquals(2500, $newCharges->sum());
+        $this->assertEquals(2500, $newCharges->map->amount()->sum());
+    }
+
+    /**
+     *  @test
+     */
+    public function can_get_details_about_a_successful_charge()
+    {
+        $paymentGateway = $this->getPaymentGateway();
+
+        $charge = $paymentGateway->charge(2500, $paymentGateway->getValidTestToken('0000000000004242'));
+
+        $this->assertEquals('4242', $charge->cardLastFour());
+        $this->assertEquals(2500, $charge->amount());
     }
 
     /**
@@ -65,6 +80,6 @@ trait PaymentGatewayContractTests
         });
 
         $this->assertCount(2, $newCharges);
-        $this->assertEquals([5000, 4000], $newCharges->all());
+        $this->assertEquals([5000, 4000], $newCharges->map->amount()->all());
     }
 }
