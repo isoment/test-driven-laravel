@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 
 class StripePaymentGateway implements PaymentGateway
 {
+    const TEST_CARD_NUMBER = '4242424242424242';
+
     private string $apiKey;
     private \Stripe\StripeClient $stripe;
 
@@ -21,16 +23,21 @@ class StripePaymentGateway implements PaymentGateway
      *  @param int $charge this amount to the customer
      *  @param string $token representing the customers payment method
      *  @throws \Stripe\Exception\InvalidRequestException
-     *  @return void
+     *  @return App\Billing\Charge
      */
-    public function charge(int $amount, string $token): void
+    public function charge(int $amount, string $token) : Charge
     {
         try {
-            $this->stripe->charges->create([
+            $stripeCharge = $this->stripe->charges->create([
                 'amount' => $amount,
                 'currency' => 'usd',
                 'source' => $token
             ], ['api_key' => $this->apiKey]);
+
+            return new Charge([
+                'amount' => $stripeCharge['amount'],
+                'card_last_four' => $stripeCharge['payment_method_details']['card']['last4'],
+            ]);
         } catch(\Stripe\Exception\InvalidRequestException $e) {
             throw new PaymentFailedException;
         }
@@ -40,11 +47,11 @@ class StripePaymentGateway implements PaymentGateway
      *  We need to get a valid stripe payment token in order to make charges
      *  @return string
      */
-    public function getValidTestToken() : string
+    public function getValidTestToken($cardNumber = self::TEST_CARD_NUMBER) : string
     {
         return $this->stripe->tokens->create([
             'card' => [
-                'number' => '4242424242424242',
+                'number' => $cardNumber,
                 'exp_month' => 1,
                 'exp_year' => date('Y') + 1,
                 'cvc' => '123',
@@ -67,7 +74,12 @@ class StripePaymentGateway implements PaymentGateway
         // The callback will try to charge the payment gateway.
         $callback();
 
-        return $this->newChargesSince($latestCharge)->pluck('amount');
+        return $this->newChargesSince($latestCharge)->map(function($stripeCharge) {
+            return new Charge([
+                'amount' => $stripeCharge['amount'],
+                'card_last_four' => $stripeCharge['payment_method_details']['card']['last4'],
+            ]);
+        });
     }
 
     /**

@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 
 class FakePaymentGateway implements PaymentGateway
 {
+    const TEST_CARD_NUMBER = '4242424242424242';
+
     private Collection $charges;
     private Collection $tokens;
     private $beforeFirstChargeCallback;
@@ -26,7 +28,7 @@ class FakePaymentGateway implements PaymentGateway
      *  @param string $cardNumber
      *  @return string
      */
-    public function getValidTestToken($cardNumber = '4242424242424242') : string
+    public function getValidTestToken($cardNumber = self::TEST_CARD_NUMBER) : string
     {
         $token = 'fake-tok_' . Str::random(24);
         $this->tokens[$token] = $cardNumber;
@@ -37,9 +39,9 @@ class FakePaymentGateway implements PaymentGateway
      *  Add a charge to the collection
      *  @param int $amount
      *  @param string $token
-     *  @return void
+     *  @return App\Billing\Charge
      */
-    public function charge(int $amount, string $token)
+    public function charge(int $amount, string $token) : Charge
     {
         /*
             To avoid the callback being called infinitely we can assign it to a
