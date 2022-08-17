@@ -52,7 +52,7 @@ class Reservation
      */
     public function complete(PaymentGateway $paymentGateway, string $paymentToken) : Order
     {
-        $paymentGateway->charge(
+        $charge = $paymentGateway->charge(
             $this->totalCost(), 
             $paymentToken
         );
@@ -60,7 +60,7 @@ class Reservation
         return Order::forTickets(
             $this->tickets(), 
             $this->email(), 
-            $this->totalCost()
+            $charge
         );
     }
 

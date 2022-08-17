@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Billing\Charge;
 use App\Facades\OrderConfirmationNumber;
 use App\OrderConfirmationNumberGenerator;
 use App\Reservation;
@@ -29,18 +30,19 @@ class Order extends Model
 
     /**
      *  Create an order and loop over the tickets the customer wants updating the blank
-     *  ticket associating it with the users order.
+     *  ticket thereby associating it with the users order.
      *  @param Illuminate\Database\Eloquent\Collection $tickets
      *  @param string $email
-     *  @param int|null $amount
+     *  @param App\Billing\Charge $charge
      *  @return self
      */
-    public static function forTickets(Collection $tickets, string $email, int $amount = null) : self
+    public static function forTickets(Collection $tickets, string $email, Charge $charge) : self
     {
         $order = self::create([
             'confirmation_number' => OrderConfirmationNumber::generate(),
             'email' => $email,
-            'amount' => $amount === null ? $tickets->sum('price') : $amount,
+            'amount' => $charge->amount(),
+            'card_last_four' => $charge->cardLastFour()
         ]);
 
         foreach ($tickets as $ticket) {
