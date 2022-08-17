@@ -93,21 +93,6 @@ class Concert extends Model
     }
 
     /**
-     *  Order the tickets the user wants or throw an exception if the tickets
-     *  are not available.
-     *  @param string $email
-     *  @param int $ticketQuantity
-     *  @throws NotEnoughTicketsException
-     *  @return App\Models\Order
-     */
-    public function orderTickets(string $email, int $ticketQuantity) : Order
-    {
-        $tickets = $this->findTickets($ticketQuantity);
-
-        return $this->createOrder($email, $tickets);
-    }
-
-    /**
      *  @param int $quantity
      *  @param string $email
      *  @return App\Reservation
@@ -137,17 +122,6 @@ class Concert extends Model
         }
 
         return $tickets;
-    }
-
-    /**
-     *  Create an order by calling the forTickets() static method on the Order class.
-     *  @param string $email
-     *  @param Illuminate\Database\Eloquent\Collection $tickets
-     *  @return App\Models\Order
-     */
-    public function createOrder(string $email, Collection $tickets) : Order
-    {
-        return Order::forTickets($tickets, $email, $tickets->sum('price'));
     }
 
     /**
