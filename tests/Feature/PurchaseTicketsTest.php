@@ -60,7 +60,7 @@ class PurchaseTicketsTest extends TestCase
         $response->assertJson([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
-            'amount' => 9750,
+            'amount' => '9750',
             'tickets' => [
                 ['code' => 'TICKETCODE1'],
                 ['code' => 'TICKETCODE2'],

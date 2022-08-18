@@ -11,6 +11,7 @@ use App\Reservation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection as SupportCollection;
 
 class Order extends Model
 {
@@ -31,12 +32,12 @@ class Order extends Model
     /**
      *  Create an order and loop over the tickets the customer wants updating the blank
      *  ticket thereby associating it with the users order.
-     *  @param Illuminate\Database\Eloquent\Collection $tickets
+     *  @param Illuminate\Database\Eloquent\Collection|Illuminate\Support\Collection $tickets
      *  @param string $email
      *  @param App\Billing\Charge $charge
      *  @return self
      */
-    public static function forTickets(Collection $tickets, string $email, Charge $charge) : self
+    public static function forTickets(Collection|SupportCollection $tickets, string $email, Charge $charge) : self
     {
         $order = self::create([
             'confirmation_number' => OrderConfirmationNumber::generate(),
@@ -45,9 +46,7 @@ class Order extends Model
             'card_last_four' => $charge->cardLastFour()
         ]);
 
-        foreach ($tickets as $ticket) {
-            $order->tickets()->save($ticket);
-        }
+        $tickets->each->claimFor($order);
 
         return $order;
     }
