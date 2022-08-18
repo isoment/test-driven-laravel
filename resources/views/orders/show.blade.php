@@ -18,7 +18,7 @@
         <h4 class="mt-5 mb-3">Your Tickets</h4>
         {{-- Tickets --}}
         @foreach ($order->tickets as $ticket)
-            <div class="card">
+            <div class="card my-4">
                 <div class="card-header bg-secondary text-white">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="text-left">

@@ -740,6 +740,10 @@ Now we can call...
 And our facade will have access to the generate method of our interface and all the resolution will be handled
 by the service container. It just looks a little cleaner now.
 
+Facades have some testing helpers built in. We can call some mockery helper methods that we can use when testing.
+For instance on the OrderConfirmationNumber facade...
+
+    OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
 
 Section 14
 ----------
