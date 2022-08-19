@@ -45,7 +45,7 @@ class Ticket extends Model
         $this->update(['reserved_at' => NULL]);
     }
 
-    public function claimFor(Order $order)
+    public function claimFor(Order $order) : void
     {
         $this->code = TicketCode::generate();
         $order->tickets()->save($this);

@@ -786,3 +786,24 @@ the facade when we want to mock that facade in our tests.
 
     We are simply stating that the class we want to mock is the class that we have specified in the getFacadeAccessor()
     resulting in laravel creating a mock of the TicketCodeGenerator interface in our tests.
+
+We want to be able to generate a short ticket code that concerts can use to verify the ticket is valid. We can't use
+the same method for generating confirmation numbers since we want this to be short and and easy to read.
+
+We can use a library called hashids. This library takes a number and gives a unique short string hash of
+that number.
+
+    https://hashids.org/php/
+
+When can pass a salt into the constructor when instantiating the library to make our codes unique to our project...
+
+    new Hashids\Hashids('uihuausadhsd');
+
+We can also specify that we want the hashid to be padded as well. This ensures that every hashid will have
+a minimum of 6 characters.
+
+    new Hashids\Hashids('uihuausadhsd', 6);
+
+The characters that make up the hash id can be specified as well...
+
+    new Hashids\Hashids('uihuausadhsd', 6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
