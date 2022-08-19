@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Facades\TicketCode;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,6 +43,12 @@ class Ticket extends Model
     public function release() : void
     {
         $this->update(['reserved_at' => NULL]);
+    }
+
+    public function claimFor(Order $order)
+    {
+        $this->code = TicketCode::generate();
+        $order->tickets()->save($this);
     }
 
     /**

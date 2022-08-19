@@ -745,6 +745,7 @@ For instance on the OrderConfirmationNumber facade...
 
     OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
 
+
 Section 14
 ----------
 
@@ -755,3 +756,33 @@ Laravel supports higher order messages for collections. This allows us to use ma
 In the above line we have a charges collection. We can map over each item in the collection. In this case
 each item in the collection is a Charge object, we can then call the amount() method to get the charge amount
 and then sum() to get the sum of all the charges in the collection.
+
+
+Section 15
+----------
+
+When we create a custom facade laravel does some things behind the scenes to try to figure out the class behind
+the facade when we want to mock that facade in our tests.
+
+    Remember in our custom facades we are providing an interface in getFacadeAccessor() Laravel might not know
+    which concrete class this interface should resolve to.
+
+    We can solve this by specifying which class should be mocked in our facade.
+
+    Take the following code...
+
+        class TicketCode extends Facade
+        {
+            protected static function getFacadeAccessor()
+            {
+                return TicketCodeGenerator::class;
+            }
+
+            protected static function getMockableClass()
+            {
+                return static::getFacadeAccessor();
+            }
+        }
+
+    We are simply stating that the class we want to mock is the class that we have specified in the getFacadeAccessor()
+    resulting in laravel creating a mock of the TicketCodeGenerator interface in our tests.
