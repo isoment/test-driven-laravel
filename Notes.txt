@@ -807,3 +807,22 @@ a minimum of 6 characters.
 The characters that make up the hash id can be specified as well...
 
     new Hashids\Hashids('uihuausadhsd', 6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+When mocking out dependencies we can run into a situation where mocks become out of sync with changes we make to
+the real classes that they mock.
+
+    Let's imagine we have a facade that accesses an interface and in one of the classes that implements
+    that interface we change a method. In the test we are using mockery on the facade and still referring to
+    the original method that no longer exists. We can run the test and it will still pass.
+
+    We can set mockery to notify when a test tries to mock a non existent method on an interface. By default
+    mockery allows us to mock methods that do not exist on objects or interfaces.
+
+In TestCase.php we can add the following to override the default setup...
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
+    }
