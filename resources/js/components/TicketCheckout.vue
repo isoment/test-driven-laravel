@@ -160,7 +160,7 @@ export default {
 
         this.paymentDropdown = false;
 
-        alert('Tickets have been purchased!');
+        window.location = `/orders/${result.data.confirmation_number}`;
       } catch(error) {
         if (error.response.status === 422) {
           this.validationErrors = error.response.data.errors;
