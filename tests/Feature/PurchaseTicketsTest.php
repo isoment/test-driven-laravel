@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Billing\FakePaymentGateway;
 use App\Billing\PaymentGateway;
 use App\Facades\OrderConfirmationNumber;
+use App\Facades\TicketCode;
 use App\Models\Concert;
 use App\OrderConfirmationNumberGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,9 +40,9 @@ class PurchaseTicketsTest extends TestCase
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
-        $this->withExceptionHandling();
-
+        // We can call mockery functions on our custom facades
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+        TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
         $concert = Concert::factory()
             ->published()

@@ -212,4 +212,14 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom
+    |--------------------------------------------------------------------------
+    |
+    | Custom config values will go here.
+    |
+    */
+    'ticket_code_salt' => env('TICKET_CODE_SALT'),
+
 ];
