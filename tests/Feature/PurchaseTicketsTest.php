@@ -20,13 +20,14 @@ class PurchaseTicketsTest extends TestCase
     /*
         When we pass the PaymentGateway interface into the ConcertOrderController the service container 
         does not know what to resolve. Here we can specify that we resolve the PaymentGateway interface
-        to the FakePaymentGateway
+        to the FakePaymentGateway. We also want to use a fake mailer for all these tests.
     */
     protected function setUp() : void
     {
         parent::setUp();
         $this->paymentGateway = new FakePaymentGateway;
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
+        Mail::fake();
     }
 
     private function orderTickets(int $concertId, array $params) : TestResponse
@@ -39,8 +40,6 @@ class PurchaseTicketsTest extends TestCase
      */
     public function customer_can_purchase_tickets_to_a_published_concert()
     {
-        Mail::fake();
-
         // We can call mockery functions on our custom facades
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
