@@ -831,5 +831,25 @@ We probably wouldn't want to keep this on all the time since there are cases whe
 behavior.
 
 
-Section 16
+Section 17
 ----------
+
+In the video an older version of laravel authentication is used. We can use Fortify to handle the applications
+authentication.
+
+In config/app.php we need to register Fortify in the service providers...
+
+    'providers' => [
+        /*
+         * Package Service Providers...
+         */
+        App\Providers\FortifyServiceProvider::class,
+    ],
+
+We can then open the file FortifyServiceProvider and add the following within the boot() method...
+
+    Fortify::loginView(function() {
+        return view('auth.login');
+    });
+
+Fortify will already define the route for us, we can just tell it to return the login view that we define.
