@@ -14,6 +14,18 @@ class PromoterLoginTest extends TestCase
     /**
      *  @test
      */
+    public function the_login_view_is_shown_when_a_get_request_is_made()
+    {
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+
+        $this->assertEquals('auth.login', $response->original->getName());
+    }
+
+    /**
+     *  @test
+     */
     public function logging_in_with_valid_credentials()
     {
         $user = User::factory()->create([
