@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function() {
-    return "odI382haol3";
+    return "TicketApp";
 });
 
 Route::get('/concerts/{id}', [App\Http\Controllers\ConcertController::class, 'show']);

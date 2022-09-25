@@ -31,7 +31,7 @@
                         </ul>
                     </div>
                 @endif
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Log in</button>
             </form>
         </div>
     <div>

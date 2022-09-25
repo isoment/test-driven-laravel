@@ -854,6 +854,14 @@ We can then open the file FortifyServiceProvider and add the following within th
 
 Fortify will already define the route for us, we can just tell it to return the login view that we define.
 
+-------
+Dusk...
+-------
+
+We can run  dusk tests using...
+
+    php artisan dusk
+
 To install laravel dusk the php zip extension must be installed in the docker container. See the
 docker file for the latest. Follow the instructions in the documentation for installing dusk and the
 web drivers.
@@ -901,3 +909,28 @@ Modify the AppServiceProvider.php file...
     if ($this->app->environment('local', 'testing')) {
         $this->app->register(DuskServiceProvider::class);
     }
+
+When defining dusk test everything within the browser callback is done within isolation in the
+browser. Outside of this we can still use all the PHP and Laravel logic we use in the unit and 
+feature tests...
+
+    $this->browse(function (Browser $browser) {
+        $browser->visit('/')
+                ->assertSee('odI382haol3');
+    });
+
+When testing we should not use the RefreshDatabase trait. Instead we will use the DatabaseMigrations
+which re-migrates the database for each test.
+
+There are many different methods for interacting with our application using dusk.
+
+    type('input-name', 'value') will allow us to type a value into a specified input.
+
+    press('Text') will find the button with the word 'Text' and click it.
+
+    assertPathIs('path') will assert that we are on a given path, useful when we want to check redirects.
+
+When testing the login we need to makes sure to clear cookies at the end of the test to make sure
+there is no interference with the following test.
+
+    $browser->driver->manage()->deleteAllCookies();
