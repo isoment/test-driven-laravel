@@ -853,3 +853,51 @@ We can then open the file FortifyServiceProvider and add the following within th
     });
 
 Fortify will already define the route for us, we can just tell it to return the login view that we define.
+
+To install laravel dusk the php zip extension must be installed in the docker container. See the
+docker file for the latest. Follow the instructions in the documentation for installing dusk and the
+web drivers.
+
+    composer require --dev laravel/dusk
+
+    php artisan dusk:install
+
+We will need to update the docker-compose file and add selenium...
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium
+    networks:
+      - application
+
+We need to create a new env file... 
+
+    .env.dusk.local
+
+    In here we need to ensure that the application URL points to the nginx server...
+
+        APP_URL=http://nginx
+
+    Add a new entry...
+
+        DUSK_DRIVER_URL=http://selenium:4444/wd/hub
+    
+    Also we need to create a new database solely for dusk use, don't forget to create it in the 
+    database too...
+
+        DB_DATABASE=laravel-dusk
+
+We need to modify the driver() method in the DuskTestCase.php file...
+
+    return RemoteWebDriver::create(
+        $_ENV['DUSK_DRIVER_URL'] ?? 'http://selenium:4444/wd/hub',
+        DesiredCapabilities::chrome()->setCapability(
+            ChromeOptions::CAPABILITY, $options
+        )
+    );
+
+Modify the AppServiceProvider.php file...
+
+    if ($this->app->environment('local', 'testing')) {
+        $this->app->register(DuskServiceProvider::class);
+    }
