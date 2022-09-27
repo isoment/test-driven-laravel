@@ -17,11 +17,15 @@ Route::get('/', function() {
     return "TicketApp";
 });
 
-Route::get('/concerts/{id}', [App\Http\Controllers\ConcertController::class, 'show']);
+Route::get('/concerts/{id}', [App\Http\Controllers\ConcertController::class, 'show'])
+    ->name('concerts.show');
+
 Route::post('/concerts/{id}/orders', [App\Http\Controllers\ConcertOrderController::class, 'store']);
 Route::get('/orders/{confirmationNumber}', [App\Http\Controllers\OrderController::class, 'show']);
 
-
-Route::middleware('auth')->group(function() {
-    Route::get('/backstage/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create']);
-});
+Route::middleware('auth')
+    ->prefix('backstage')
+    ->group(function() {
+        Route::get('/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create']);
+        Route::post('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'store']);
+    });
