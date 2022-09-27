@@ -18,7 +18,10 @@ Route::get('/', function() {
 });
 
 Route::get('/concerts/{id}', [App\Http\Controllers\ConcertController::class, 'show']);
-
 Route::post('/concerts/{id}/orders', [App\Http\Controllers\ConcertOrderController::class, 'store']);
-
 Route::get('/orders/{confirmationNumber}', [App\Http\Controllers\OrderController::class, 'show']);
+
+
+Route::middleware('auth')->group(function() {
+    Route::get('/backstage/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create']);
+});
