@@ -12,6 +12,12 @@ class AddConcertTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function fromURL(string $url) : self
+    {
+        session()->setPreviousUrl($url);
+        return $this;
+    }
+
     /**
      *  @test
      */
@@ -100,6 +106,36 @@ class AddConcertTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/login');
+        $this->assertEquals(0, Concert::count());
+    }
+
+    /**
+     *  @test
+     */
+    public function title_is_required()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->fromUrl('/backstage/concerts/new')->post('/backstage/concerts', [
+            'title' => '',
+            'subtitle' => 'with the whatever',
+            'additional_information' => 'You must be 21+ to attend',
+            'date' => '2023-11-10',
+            'time' => '8:00pm',
+            'venue' => 'The Mosh Pit',
+            'venue_address' => '123 Fake St',
+            'city' => 'Faketown',
+            'state' => 'CA',
+            'zip' => '12345',
+            'ticket_price' => '32.50',
+            'ticket_quantity' => '75'
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/backstage/concerts/new');
+        $response->assertSessionHasErrors('title');
         $this->assertEquals(0, Concert::count());
     }
 }

@@ -934,3 +934,23 @@ When testing the login we need to makes sure to clear cookies at the end of the 
 there is no interference with the following test.
 
     $browser->driver->manage()->deleteAllCookies();
+
+When testing requests we can modify the request headers, this is useful for when we want to simulate
+coming from a specific place, in the following case simulate the request coming from 
+/backstage/concerts/new...
+
+    /**
+     *  @test
+     */
+    public function some_test()
+    {
+        $response = $this->post('/backstage/concerts', [
+            'title' => '',
+        ], [
+            'referer' => url('/backstage/concerts/new')
+        ]);
+    }
+
+    We can also accomplish the same thing by using the following method on the session helper...
+
+        session()->setPreviousUrl('/backstage/concerts/new');

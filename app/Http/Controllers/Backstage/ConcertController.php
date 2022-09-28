@@ -20,7 +20,9 @@ class ConcertController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request->toArray());
+        $request->validate([
+            'title' => ['required']
+        ]);
 
         $concert = Concert::create([
             'title' => $request['title'],

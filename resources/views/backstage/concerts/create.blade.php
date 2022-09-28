@@ -8,6 +8,7 @@
             </div>
         </div>
         <form action="/backstage/concerts" method="POST">
+            @csrf
             <div>
                 <div class="container">
                     <div class="row">
