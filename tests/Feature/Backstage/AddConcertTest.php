@@ -93,6 +93,8 @@ class AddConcertTest extends TestCase
 
             $this->assertTrue($concert->user->is($user));
 
+            $this->assertTrue($concert->isPublished());
+
             $this->assertEquals('No Warning', $concert->title);
             $this->assertEquals('with the whatever', $concert->subtitle);
             $this->assertEquals('You must be 21+ to attend', $concert->additional_information);

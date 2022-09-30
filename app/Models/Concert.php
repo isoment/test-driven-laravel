@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Exceptions\NotEnoughTicketsException;
 use App\Reservation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,6 +96,16 @@ class Concert extends Model
     public function scopePublished(Builder $query) : Builder
     {
         return $query->whereNotNull('published_at');
+    }
+
+    public function isPublished() : bool
+    {
+        return $this->published_at !== NULL;
+    }
+
+    public function publish() : void
+    {
+        $this->update(['published_at' => Carbon::now()]);
     }
 
     /**
