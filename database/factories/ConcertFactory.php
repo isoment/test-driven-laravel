@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,9 @@ class ConcertFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => function () {
+                return User::factory()->create()->id;
+            },
             'title' => 'Example Band',
             'subtitle' => 'With the Fake Openers',
             'date' => Carbon::parse('+2 weeks'),

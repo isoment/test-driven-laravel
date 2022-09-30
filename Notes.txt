@@ -954,3 +954,18 @@ coming from a specific place, in the following case simulate the request coming 
     We can also accomplish the same thing by using the following method on the session helper...
 
         session()->setPreviousUrl('/backstage/concerts/new');
+
+When creating model factors we often want to create records in other tables to satisfy foreign
+key requirements. However we still often want to override this to define a specific user for
+the relationship. We can use a closure for this...
+
+    public function definition()
+    {
+        return [
+            'user_id' => function () {
+                return User::factory()->create()->id;
+            },
+            
+            ...
+        ];
+    }

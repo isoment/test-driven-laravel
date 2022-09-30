@@ -9,6 +9,7 @@ use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ConcertController extends Controller
@@ -33,7 +34,7 @@ class ConcertController extends Controller
             'ticket_quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
-        $concert = Concert::create([
+        $concert = Auth::user()->concerts()->create([
             'title' => $request['title'],
             'subtitle' => $request['subtitle'],
             'date' => Carbon::parse(vsprintf('%s %s', [

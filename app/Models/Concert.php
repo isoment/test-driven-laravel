@@ -21,6 +21,11 @@ class Concert extends Model
         'date' => 'datetime'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      *  The tickets table is a pivot. Many to many relationship between
      *  the Order and Concert models.
