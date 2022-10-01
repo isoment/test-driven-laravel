@@ -969,3 +969,19 @@ the relationship. We can use a closure for this...
             ...
         ];
     }
+
+
+Section 19
+----------
+
+When testing we often want to assert that a response contains something. When returning a view we
+have access to methods like getData() that get the array of the data that was bound to the view.
+
+    $response = $this->get('/backstage/concerts');
+    dd($response->original);
+
+    When the controller returns a view we will see the whole view instance object. To get only
+    the data array given to the view...
+
+    $response = $this->get('/backstage/concerts');
+    dd($response->original->getData());

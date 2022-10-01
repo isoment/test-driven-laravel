@@ -98,11 +98,17 @@ class Concert extends Model
         return $query->whereNotNull('published_at');
     }
 
+    /**
+     *  @return bool
+     */
     public function isPublished() : bool
     {
         return $this->published_at !== NULL;
     }
 
+    /**
+     *  @return void
+     */
     public function publish() : void
     {
         $this->update(['published_at' => Carbon::now()]);

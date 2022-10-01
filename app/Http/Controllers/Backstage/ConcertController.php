@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Log;
 
 class ConcertController extends Controller
 {
+    public function index()
+    {
+        return view('backstage.concerts.index', [
+            'concerts' => Concert::all()
+        ]);
+    }
+
     public function create() : View
     {
         return view('backstage.concerts.create');

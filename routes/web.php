@@ -26,6 +26,7 @@ Route::get('/orders/{confirmationNumber}', [App\Http\Controllers\OrderController
 Route::middleware('auth')
     ->prefix('backstage')
     ->group(function() {
+        Route::get('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'index']);
         Route::get('/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create']);
         Route::post('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'store']);
     });

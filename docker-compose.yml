@@ -61,6 +61,6 @@ services:
       - application
   selenium:
     image: selenium/standalone-chrome:latest
-    container_name: selenium
+    container_name: ${APP_NAME}_selenium
     networks:
       - application
