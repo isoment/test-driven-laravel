@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
+use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;

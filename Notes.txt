@@ -983,5 +983,37 @@ have access to methods like getData() that get the array of the data that was bo
     When the controller returns a view we will see the whole view instance object. To get only
     the data array given to the view...
 
-    $response = $this->get('/backstage/concerts');
-    dd($response->original->getData());
+        $response = $this->get('/backstage/concerts');
+        dd($response->original->getData());
+
+Laravel classes can use the Macroable trait. When a class uses this trait we can add new methods to
+the class at runtime. For example the TestResponse class, which is the response laravel uses when running
+tests, uses this trait. We can add custom assertions or helpers to the response. We can set this up in the
+setUp() method at the beginning of each test file...
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        TestResponse::macro('data', function($key) {
+            return $this->original->getData()[$key];
+        });
+    }
+
+    $this->assertTrue($response->data('concerts')->contains($concertA));
+
+        The above will add a data helper that we can call from the test response passing in a key of the
+        data value we want to get. $this in the closure refers to TestResponse.
+    
+There are a lot of classes that implement the Macroable trait. For example we can also add a macro on
+the Eloquent\Collection class for use in assertions.
+
+    Collection::macro('assertNotContains', function($value) {
+        Assert::assertFalse(
+            $this->contains($value),
+            "Failed asserting that the collection does not contain the specified value"
+        );
+    });
+
+    The Assert class is part of phpunit, all the assertions are static methods that we can call directly.
+    $this refers to the Eloquent\Collection class.

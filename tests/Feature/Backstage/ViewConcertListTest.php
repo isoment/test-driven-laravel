@@ -4,12 +4,42 @@ namespace Tests\Feature\Backstage;
 
 use App\Models\Concert;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
 class ViewConcertListTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+
+        // When used in a closure the $this keyword will refer to the class of the method that
+        // accepts the closure as a param, in this case TestResponse.
+        TestResponse::macro('data', function($key) {
+            return $this->original->getData()[$key];
+        });
+
+        // Phpunit assertions are all static methods so we can call them directly from the class.
+        // $this context refers to Collection.
+        Collection::macro('assertContains', function($value) {
+            Assert::assertTrue(
+                $this->contains($value), 
+                "Failed asserting that the collection contained the specified value"
+            );
+        });
+
+        Collection::macro('assertNotContains', function($value) {
+            Assert::assertFalse(
+                $this->contains($value),
+                "Failed asserting that the collection does not contain the specified value"
+            );
+        });
+    }
 
     /**
      *  @test
@@ -39,9 +69,10 @@ class ViewConcertListTest extends TestCase
         $response = $this->get('/backstage/concerts');
 
         $response->assertStatus(200);
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertA));
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertB));
-        $this->assertTrue($response->original->getData()['concerts']->contains($concertD));
-        $this->assertFalse($response->original->getData()['concerts']->contains($concertC));
+
+        $response->data('concerts')->assertContains($concertA);
+        $response->data('concerts')->assertContains($concertB);
+        $response->data('concerts')->assertContains($concertD);
+        $response->data('concerts')->assertNotContains($concertC);
     }
 }
