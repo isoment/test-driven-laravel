@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
-use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -16,8 +15,10 @@ class ConcertController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
         return view('backstage.concerts.index', [
-            'concerts' => Concert::all()
+            'concerts' => $user->concerts
         ]);
     }
 
