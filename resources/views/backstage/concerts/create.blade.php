@@ -89,6 +89,58 @@
                     <div class="row">
                         <div class="col col-lg-4">
                             <div>
+                                <h2>Venue Information</h2>
+                                <p>Where's the show? Let attendees know the venue name and
+                                    address so they can bring the mosh.</p>
+                            </div>
+                        </div>
+                        <div class="col col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label class="form-label">Venue Name</label>
+                                        <input name="venue" class="form-control" value="{{ old('venue') }}"
+                                                placeholder="The Mosh Pit">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Street Address</label>
+                                        <input name="venue_address" class="form-control"
+                                                value="{{ old('venue_address') }}"
+                                                placeholder="500 Example Ave.">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">City</label>
+                                        <input name="city" class="form-control"
+                                                value="{{ old('city') }}" placeholder="Laraville">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-sm-6">
+                                            <div class="form-group">
+                                                <label class="form-label">State/Province</label>
+                                                <input name="state" class="form-control"
+                                                        value="{{ old('state') }}" placeholder="ON">
+                                            </div>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="form-group">
+                                                <label class="form-label">ZIP</label>
+                                                <input name="zip" class="form-control"
+                                                        value="{{ old('zip') }}" placeholder="90210">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <div>
                                 <h2>Tickets &amp; Pricing</h2>
                                 <p>Set your ticket price and availability, but don't forget,
                                     metalheads are cheap so keep it reasonable.</p>

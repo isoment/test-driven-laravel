@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
-use App\Models\Concert;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ConcertController extends Controller
 {
-    public function index()
+    public function index() : View
     {
         $user = Auth::user();
 
@@ -28,7 +28,7 @@ class ConcertController extends Controller
         return view('backstage.concerts.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         $request->validate([
             'title' => ['required'],
@@ -64,5 +64,16 @@ class ConcertController extends Controller
         $concert->publish();
 
         return redirect()->route('concerts.show', ['id' => $concert->id]);
+    }
+
+    public function edit(int $id) : View
+    {
+        $concert = Auth::user()->concerts()->findOrFail($id);
+
+        abort_if($concert->isPublished(), 403);
+
+        return view('backstage.concerts.edit', [
+            'concert' => $concert
+        ]);
     }
 }

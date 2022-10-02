@@ -1017,3 +1017,8 @@ the Eloquent\Collection class for use in assertions.
 
     The Assert class is part of phpunit, all the assertions are static methods that we can call directly.
     $this refers to the Eloquent\Collection class.
+
+
+Section 20
+----------
+

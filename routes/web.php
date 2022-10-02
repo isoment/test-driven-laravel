@@ -27,6 +27,9 @@ Route::middleware('auth')
     ->prefix('backstage')
     ->group(function() {
         Route::get('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'index']);
-        Route::get('/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create']);
+        Route::get('/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create'])
+            ->name('backstage.concerts.new');
         Route::post('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'store']);
+        Route::get('/concerts/{id}/edit', [App\Http\Controllers\Backstage\ConcertController::class, 'edit'])
+            ->name('backstage.concerts.edit');
     });
