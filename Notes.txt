@@ -1022,3 +1022,10 @@ the Eloquent\Collection class for use in assertions.
 Section 20
 ----------
 
+To get more useful error messages we can use the following in each test...
+
+    $this->withoutExceptionHandling();
+
+This can also cause tests to fail sometimes, remove if if getting errors about models not found like...
+
+    No query results for model [App\Models\Concert] 1

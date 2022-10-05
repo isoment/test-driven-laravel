@@ -7,8 +7,9 @@
             <h3 class="mb-0 text-success font-weight-bold">Edit a concert</h3>
         </div>
     </div>
-    <form action="/backstage/concerts" method="POST">
+    <form action="{{"/backstage/concerts/" . $concert->id}}" method="POST">
         @csrf
+        @method('PATCH')
         <div>
             <div class="container">
                 <div class="row">
@@ -199,8 +200,8 @@
                 </div>
             </div>
         </div>
-        <div class="container text-right mt-3">
-            <button type="submit" class="btn btn-primary">Add Concert</button>
+        <div class="container text-right mt-3 mb-3">
+            <button type="submit" class="btn btn-primary">Edit Concert</button>
         </div>
     </form>
 </div>

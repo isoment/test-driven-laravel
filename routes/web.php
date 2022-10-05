@@ -26,10 +26,14 @@ Route::get('/orders/{confirmationNumber}', [App\Http\Controllers\OrderController
 Route::middleware('auth')
     ->prefix('backstage')
     ->group(function() {
-        Route::get('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'index']);
+        Route::get('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'index'])
+            ->name('backstage.concerts.index');
         Route::get('/concerts/new', [App\Http\Controllers\Backstage\ConcertController::class, 'create'])
             ->name('backstage.concerts.new');
         Route::post('/concerts', [App\Http\Controllers\Backstage\ConcertController::class, 'store']);
         Route::get('/concerts/{id}/edit', [App\Http\Controllers\Backstage\ConcertController::class, 'edit'])
             ->name('backstage.concerts.edit');
+        Route::patch('/concerts/{id}', [App\Http\Controllers\Backstage\ConcertController::class, 'update'])
+            ->name('backstage.concerts.update');
     });
+
