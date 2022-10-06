@@ -33,12 +33,6 @@ class AddConcertTest extends TestCase
         );
     }
 
-    private function fromURL(string $url) : self
-    {
-        session()->setPreviousUrl($url);
-        return $this;
-    }
-
     /**
      *  @test
      */
