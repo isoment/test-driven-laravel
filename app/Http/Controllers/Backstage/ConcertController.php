@@ -89,8 +89,7 @@ class ConcertController extends Controller
             'city' => ['required'],
             'state' => ['required'],
             'zip' => ['required'],
-            'ticket_price' => ['required', 'numeric', 'min:5'],
-            'ticket_quantity' => ['required', 'numeric', 'min:1'],
+            'ticket_price' => ['required', 'numeric', 'min:5']
         ]);
 
         $concert = Auth::user()->concerts()->findOrFail($id);
