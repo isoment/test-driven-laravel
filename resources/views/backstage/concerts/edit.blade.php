@@ -151,13 +151,20 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col col-md-12">
+                                    <div class="col col-md-6">
                                         <div class="form-group">
                                             <label class="form-label">Price ($)</label>
                                             <div class="input-group">
                                                 <input name="ticket_price" class="form-control" placeholder="0.00"
                                                        value="{{ old('ticket_price', $concert->ticket_price_in_dollars) }}">
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Ticket Quantity</label>
+                                            <input name="ticket_quantity" class="form-control" placeholder="250"
+                                                   value="{{ old('ticket_quantity') }}">
                                         </div>
                                     </div>
                                 </div>

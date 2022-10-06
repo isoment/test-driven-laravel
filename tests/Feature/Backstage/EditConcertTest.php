@@ -27,6 +27,7 @@ class EditConcertTest extends TestCase
                 'state' => 'New state',
                 'zip' => '99999',
                 'ticket_price' => '72.50',
+                'ticket_quantity' => '10',
             ],
             $overrides
         );
@@ -149,6 +150,7 @@ class EditConcertTest extends TestCase
             'state' => 'Old state',
             'zip' => '00000',
             'ticket_price' => 2000,
+            'ticket_quantity' => 5,
         ]);
 
         $this->assertFalse($concert->isPublished());
@@ -165,6 +167,7 @@ class EditConcertTest extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
+            'ticket_quantity' => '10'
         ]);
 
         $response->assertRedirect("/backstage/concerts");
@@ -180,6 +183,7 @@ class EditConcertTest extends TestCase
             $this->assertEquals('New state', $concert->state);
             $this->assertEquals('99999', $concert->zip);
             $this->assertEquals(7250, $concert->ticket_price);
+            $this->assertEquals(10, $concert->ticket_quantity);
         });
     }
 
@@ -223,6 +227,7 @@ class EditConcertTest extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
+            'ticket_quantity' => '10',
         ]);
 
         $response->assertStatus(404);
@@ -277,6 +282,7 @@ class EditConcertTest extends TestCase
             'state' => 'New state',
             'zip' => '99999',
             'ticket_price' => '72.50',
+            'ticket_quantity' => '10',
         ]);
 
         $response->assertStatus(403);
@@ -783,6 +789,90 @@ class EditConcertTest extends TestCase
         $response->assertSessionHasErrors('ticket_price');
         tap($concert->fresh(), function ($concert) {
             $this->assertEquals(5250, $concert->ticket_price);
+        });
+    }
+
+    /**
+     *  @test
+     */
+    function ticket_quantity_is_required()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $concert = Concert::factory()->create([
+            'user_id' => $user->id,
+            'ticket_quantity' => 5,
+        ]);
+
+        $this->assertFalse($concert->isPublished());
+
+        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+            ->patch(
+                "/backstage/concerts/{$concert->id}",
+                $this->validParam(['ticket_quantity' => ''])
+        );
+
+        $response->assertRedirect("/backstage/concerts/{$concert->id}/edit");
+        $response->assertSessionHasErrors('ticket_quantity');
+        tap($concert->fresh(), function ($concert) {
+            $this->assertEquals(5, $concert->ticket_quantity);
+        });
+    }
+
+    /**
+     *  @test
+     */
+    function ticket_quantity_is_must_be_numeric()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $concert = Concert::factory()->create([
+            'user_id' => $user->id,
+            'ticket_quantity' => 5,
+        ]);
+
+        $this->assertFalse($concert->isPublished());
+
+        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+            ->patch(
+                "/backstage/concerts/{$concert->id}",
+                $this->validParam(['ticket_quantity' => 'string'])
+        );
+
+        $response->assertRedirect("/backstage/concerts/{$concert->id}/edit");
+        $response->assertSessionHasErrors('ticket_quantity');
+        tap($concert->fresh(), function ($concert) {
+            $this->assertEquals(5, $concert->ticket_quantity);
+        });
+    }
+
+    /**
+     *  @test
+     */
+    function ticket_quantity_is_must_be_at_least_one()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $concert = Concert::factory()->create([
+            'user_id' => $user->id,
+            'ticket_quantity' => 5,
+        ]);
+
+        $this->assertFalse($concert->isPublished());
+
+        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+            ->patch(
+                "/backstage/concerts/{$concert->id}",
+                $this->validParam(['ticket_quantity' => 0])
+        );
+
+        $response->assertRedirect("/backstage/concerts/{$concert->id}/edit");
+        $response->assertSessionHasErrors('ticket_quantity');
+        tap($concert->fresh(), function ($concert) {
+            $this->assertEquals(5, $concert->ticket_quantity);
         });
     }
 }

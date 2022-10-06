@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Concert;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $concert = Concert::factory()->published()->create();
+        $user = User::factory()->create([
+            'email' => 'test@test.com'
+        ]);
+
+        $concert = Concert::factory()->published()->create([
+            'user_id' => $user->id,
+            'ticket_quantity' => 10
+        ]);
 
         Ticket::factory()->count(10)->create([
             'concert_id' => $concert->id
