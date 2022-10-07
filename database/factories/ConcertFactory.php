@@ -32,7 +32,7 @@ class ConcertFactory extends Factory
             'zip' => '90210',
             'additional_information' => 'Some sample additional information',
             'ticket_price' => 2000,
-            'ticket_quantity' => 10,
+            'ticket_quantity' => 5,
         ];
     }
 
