@@ -1029,3 +1029,19 @@ To get more useful error messages we can use the following in each test...
 This can also cause tests to fail sometimes, remove if if getting errors about models not found like...
 
     No query results for model [App\Models\Concert] 1
+
+
+Section 21
+----------
+
+Each eloquent model has a public function called getAttributes() which will return all the attributes
+that a model has.
+
+assertArraySubset() has been removed from phpunit versions 9 and up. If we still want to be able to use
+it we can install an extra package...
+
+    https://packagist.org/packages/dms/phpunit-arraysubset-asserts
+
+        composer require --dev dms/phpunit-arraysubset-asserts
+
+        We can use within a test as follows either as a trait or as a static class method...
