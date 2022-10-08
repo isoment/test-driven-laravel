@@ -1045,3 +1045,23 @@ it we can install an extra package...
         composer require --dev dms/phpunit-arraysubset-asserts
 
         We can use within a test as follows either as a trait or as a static class method...
+
+Sometimes we want more control than default factories can give us when we need to create new models in our
+tests. We can create a custom class with helper methods of creating database entries.
+
+    Create a new file... database/helpers/FactoryHelpers.php
+
+    Give it a new namespace... namespace Database\Helpers;
+
+    Add the new namespace in composer.json...
+
+        "autoload": {
+            "psr-4": {
+                "App\\": "app/",
+                "Database\\Factories\\": "database/factories/",
+                "Database\\Seeders\\": "database/seeders/",
+                "Database\\Helpers\\": "database/helpers"
+            }
+        },
+
+    Run... composer dump-autoload

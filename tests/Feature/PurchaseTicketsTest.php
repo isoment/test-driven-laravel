@@ -8,6 +8,7 @@ use App\Facades\OrderConfirmationNumber;
 use App\Facades\TicketCode;
 use App\Mail\OrderConfirmationEmail;
 use App\Models\Concert;
+use Database\Helpers\FactoryHelpers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
@@ -44,11 +45,7 @@ class PurchaseTicketsTest extends TestCase
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
-        $concert = Concert::factory()
-            ->published()
-            ->create([
-                'ticket_price' => 3250
-            ])->addTickets(3);
+        $concert = FactoryHelpers::createPublished(['ticket_price' => 3250, 'ticket_quantity' => 3]);
 
         $response = $this->orderTickets($concert->id, [
             'email' => 'john@example.com',
