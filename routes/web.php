@@ -37,3 +37,8 @@ Route::middleware('auth')
             ->name('backstage.concerts.update');
     });
 
+Route::post(
+    '/backstage/published-concerts', 
+    [App\Http\Controllers\Backstage\PublishedConcertController::class, 'store']
+);
+

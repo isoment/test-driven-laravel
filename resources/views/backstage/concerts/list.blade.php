@@ -7,7 +7,7 @@
             <div class="mt-3">
                 @foreach ($concerts as $concert)
                     @if ($concert->published_at !== NULL)
-                        <div class="card mb-2" style="max-width: 25rem;">
+                        <div class="card mb-2" style="max-width: 35rem;">
                             <div class="card-body">
                             <h5 class="card-title">{{ $concert->title }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ $concert->subtitle }}</h6>
@@ -25,7 +25,7 @@
             <div class="mt-3">
                 @foreach ($concerts as $concert)
                     @if ($concert->published_at === NULL)
-                        <div class="card mb-2" style="max-width: 25rem;">
+                        <div class="card mb-2" style="max-width: 35rem;">
                             <div class="card-body">
                             <h5 class="card-title">{{ $concert->title }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ $concert->subtitle }}</h6>
