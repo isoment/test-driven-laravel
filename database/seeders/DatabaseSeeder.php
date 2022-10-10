@@ -25,9 +25,5 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id,
             'ticket_quantity' => 10
         ]);
-
-        Ticket::factory()->count(10)->create([
-            'concert_id' => $concert->id
-        ]);
     }
 }

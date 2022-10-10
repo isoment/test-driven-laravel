@@ -35,10 +35,10 @@ Route::middleware('auth')
             ->name('backstage.concerts.edit');
         Route::patch('/concerts/{id}', [App\Http\Controllers\Backstage\ConcertController::class, 'update'])
             ->name('backstage.concerts.update');
-    });
 
-Route::post(
-    '/backstage/published-concerts', 
-    [App\Http\Controllers\Backstage\PublishedConcertController::class, 'store']
-);
+        Route::post(
+            '/published-concerts', 
+            [App\Http\Controllers\Backstage\PublishedConcertController::class, 'store']
+        )->name('backstage.published-concerts.store');
+    });
 

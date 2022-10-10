@@ -61,9 +61,7 @@ class ConcertController extends Controller
             'ticket_quantity' => (int) $request['ticket_quantity']
         ]);
 
-        $concert->publish();
-
-        return redirect()->route('concerts.show', ['id' => $concert->id]);
+        return redirect()->route('backstage.concerts.index');
     }
 
     public function edit(int $id) : View

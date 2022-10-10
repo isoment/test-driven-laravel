@@ -83,11 +83,11 @@ class AddConcertTest extends TestCase
 
         tap(Concert::first(), function ($concert) use ($response, $user) {
             $response->assertStatus(302);
-            $response->assertRedirect("/concerts/{$concert->id}");
+            $response->assertRedirect("/backstage/concerts");
 
             $this->assertTrue($concert->user->is($user));
 
-            $this->assertTrue($concert->isPublished());
+            $this->assertFalse($concert->isPublished());
 
             $this->assertEquals('No Warning', $concert->title);
             $this->assertEquals('with the whatever', $concert->subtitle);
@@ -99,8 +99,8 @@ class AddConcertTest extends TestCase
             $this->assertEquals('CA', $concert->state);
             $this->assertEquals('12345', $concert->zip);
             $this->assertEquals(3250, $concert->ticket_price);
-            $this->assertEquals(75, $concert->ticketsRemaining());
             $this->assertEquals(75, $concert->ticket_quantity);
+            $this->assertEquals(0, $concert->ticketsRemaining());
         });
     }
 
@@ -160,7 +160,7 @@ class AddConcertTest extends TestCase
 
         tap(Concert::first(), function ($concert) use ($response, $user) {
             $response->assertStatus(302);
-            $response->assertRedirect("/concerts/{$concert->id}");
+            $response->assertRedirect("/backstage/concerts");
 
             $this->assertTrue($concert->user->is($user));
 
@@ -194,7 +194,7 @@ class AddConcertTest extends TestCase
 
         tap(Concert::first(), function ($concert) use ($response, $user) {
             $response->assertStatus(302);
-            $response->assertRedirect("/concerts/{$concert->id}");
+            $response->assertRedirect("/backstage/concerts");
 
             $this->assertTrue($concert->user->is($user));
 
