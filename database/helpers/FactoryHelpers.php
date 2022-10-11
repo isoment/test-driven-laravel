@@ -17,4 +17,15 @@ class FactoryHelpers
         $concert->publish();
         return $concert;
     }
+
+    /**
+     *  Create an unpublished concert
+     *  @param array $overrides
+     *  @return Concert
+     */
+    public static function createUnpublished(array $overrides) : Concert
+    {
+        $concert = Concert::factory()->unpublished()->create($overrides);
+        return $concert;
+    }
 }

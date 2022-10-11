@@ -11,6 +11,8 @@ use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEquals;
+
 class ViewConcertListTest extends TestCase
 {
     use RefreshDatabase;
@@ -40,6 +42,17 @@ class ViewConcertListTest extends TestCase
                 "Failed asserting that the collection does not contain the specified value"
             );
         });
+
+        // We can zip the two collections together which results in a 2D array with each internal
+        // element composed of the two elements at the same positions in the corresponding collections.
+        // We then check each pair to see if they are equal. $this refers to the collection.
+        Collection::macro('assertEquals', function($items) {
+            Assert::assertEquals(count($this), count($items));
+            $this->zip($items)->each(function($pair) {
+                list($a, $b) = $pair;
+                Assert::assertTrue($a->is($b));
+            });
+        });
     }
 
     /**
@@ -66,26 +79,22 @@ class ViewConcertListTest extends TestCase
         $publishedConcertB = FactoryHelpers::createPublished(['user_id' => $otherUser->id]);
         $publishedConcertC = FactoryHelpers::createPublished(['user_id' => $user->id]);
         
-        $unpublishedConcertA = Concert::factory()->unpublished()->create(['user_id' => $user->id]);
-        $unpublishedConcertB = Concert::factory()->unpublished()->create(['user_id' => $otherUser->id]);
-        $unpublishedConcertC = Concert::factory()->unpublished()->create(['user_id' => $user->id]);
+        $unpublishedConcertA = FactoryHelpers::createUnpublished(['user_id' => $user->id]);
+        $unpublishedConcertB = FactoryHelpers::createUnpublished(['user_id' => $otherUser->id]);
+        $unpublishedConcertC = FactoryHelpers::createUnpublished(['user_id' => $user->id]);
 
         $response = $this->get('/backstage/concerts');
 
         $response->assertStatus(200);
 
-        $response->data('publishedConcerts')->assertContains($publishedConcertA);
-        $response->data('publishedConcerts')->assertNotContains($publishedConcertB);
-        $response->data('publishedConcerts')->assertContains($publishedConcertC);
-        $response->data('publishedConcerts')->assertNotContains($unpublishedConcertA);
-        $response->data('publishedConcerts')->assertNotContains($unpublishedConcertB);
-        $response->data('publishedConcerts')->assertNotContains($unpublishedConcertC);
+        $response->data('publishedConcerts')->assertEquals([
+            $publishedConcertA,
+            $publishedConcertC
+        ]);
 
-        $response->data('unpublishedConcerts')->assertNotContains($publishedConcertA);
-        $response->data('unpublishedConcerts')->assertNotContains($publishedConcertB);
-        $response->data('unpublishedConcerts')->assertNotContains($publishedConcertC);
-        $response->data('unpublishedConcerts')->assertContains($unpublishedConcertA);
-        $response->data('unpublishedConcerts')->assertNotContains($unpublishedConcertB);
-        $response->data('unpublishedConcerts')->assertContains($unpublishedConcertC);
+        $response->data('unpublishedConcerts')->assertEquals([
+            $unpublishedConcertA,
+            $unpublishedConcertC
+        ]);
     }
 }
