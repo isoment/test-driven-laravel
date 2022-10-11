@@ -20,7 +20,8 @@ class ConcertController extends Controller
         $user = Auth::user();
 
         return view('backstage.concerts.list', [
-            'concerts' => $user->concerts
+            'publishedConcerts' => $user->concerts->filter->isPublished(),
+            'unpublishedConcerts' => $user->concerts->reject->isPublished(),
         ]);
     }
 
