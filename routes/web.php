@@ -40,5 +40,10 @@ Route::middleware('auth')
             '/published-concerts', 
             [App\Http\Controllers\Backstage\PublishedConcertController::class, 'store']
         )->name('backstage.published-concerts.store');
+
+        Route::get(
+            '/published-concerts/{id}/orders', 
+            [App\Http\Controllers\Backstage\PublishedConcertOrdersController::class, 'index']
+        )->name('backstage.published-concert-orders.index');
     });
 

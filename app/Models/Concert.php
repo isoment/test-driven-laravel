@@ -172,4 +172,13 @@ class Concert extends Model
     {
         return $this->tickets()->available()->count();
     }
+
+    /**
+     *  Get the quantity of tickets that have been sold
+     *  @return int
+     */
+    public function ticketsSold() : int
+    {
+        return $this->tickets()->sold()->count();
+    }
 }
