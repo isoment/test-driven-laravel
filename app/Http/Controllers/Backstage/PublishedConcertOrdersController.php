@@ -20,7 +20,8 @@ class PublishedConcertOrdersController extends Controller
             ->findOrFail($concertId);
 
         return view('backstage.published-concert-orders.list', [
-            'concert' => $concert
+            'concert' => $concert,
+            'orders' => $concert->orders()->latest()->take(10)->get(),
         ]);
     }
 }

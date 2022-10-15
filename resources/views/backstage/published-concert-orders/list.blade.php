@@ -79,13 +79,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>test@test.com</td>
-                                <td>3</td>
-                                <td>125.87</td>
-                                <td>**** 4242</td>
-                                <td>Jan 20, 2022 @ 11:43pm</td>
-                            </tr>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>{{ $order->email }}</td>
+                                    <td>{{ $order->ticketQuantity() }}</td>
+                                    <td>${{ number_format($order->amount / 100, 2) }}</td>
+                                    <td>**** {{ $order->card_last_four }}</td>
+                                    <td>{{ $order->created_at->format('M j, Y @ g:ia') }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
