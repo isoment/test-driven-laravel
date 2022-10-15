@@ -3,7 +3,10 @@
 namespace Tests\Feature\Backstage;
 
 use App\Models\Concert;
+use App\Models\Order;
+use App\Models\Ticket;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Helpers\FactoryHelpers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,6 +24,10 @@ class ViewPublishedConcertOrderTest extends TestCase
         $this->actingAs($user);
 
         $concert = FactoryHelpers::createPublished(['user_id' => $user->id]);
+
+        $order = FactoryHelpers::createOrderForConcert($concert, ['created_at' => Carbon::parse('11 days ago')]);
+
+        dd($order);
 
         $response = $this->get("/backstage/published-concerts/{$concert->id}/orders");
 

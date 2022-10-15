@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<div class="bg-soft p-xs-y-5">
+<div>
     <div class="container m-xs-b-4">
         <div class="m-xs-b-6">
             <h5 class="mt-5 mb-2 font-weight-light text-secondary">Overview</h5>
@@ -64,36 +64,33 @@
                 </div>
             </div>
         </div>
-        {{-- <div>
-            <h2 class="m-xs-b-2 text-lg">Recent Orders</h2>
-            <div class="card">
+        <div class="mt-5">
+            <h5 class="font-weight-light text-secondary">Recent Orders</h5>
+            <div class="card p-3">
                 <div class="card-section">
                     <table class="table">
-                        <thead>
-                        <tr>
-                            <th class="text-left">Email</th>
-                            <th class="text-left">Tickets</th>
-                            <th class="text-left">Amount</th>
-                            <th class="text-left">Card</th>
-                            <th class="text-left">Purchased</th>
-                        </tr>
+                        <thead class="border-none">
+                            <tr>
+                                <th class="text-left orders-table-header">Email</th>
+                                <th class="text-left orders-table-header">Tickets</th>
+                                <th class="text-left orders-table-header">Amount</th>
+                                <th class="text-left orders-table-header">Card</th>
+                                <th class="text-left orders-table-header">Purchased</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach($orders as $order)
-                            <?php /** @var \App\Order $order */ ?>
                             <tr>
-                                <td>{{ $order->email }}</td>
-                                <td>{{ $order->ticketQuantity() }}</td>
-                                <td>${{ number_format($order->amount / 100, 2) }}</td>
-                                <td><span class="text-dark-soft">****</span> {{ $order->card_last_four }}</td>
-                                <td class="text-dark-soft">{{ $order->created_at->format('M j, Y @ g:ia') }}</td>
+                                <td>test@test.com</td>
+                                <td>3</td>
+                                <td>125.87</td>
+                                <td>**** 4242</td>
+                                <td>Jan 20, 2022 @ 11:43pm</td>
                             </tr>
-                        @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 </div>
 @endsection
