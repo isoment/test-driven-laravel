@@ -181,4 +181,22 @@ class Concert extends Model
     {
         return $this->tickets()->sold()->count();
     }
+
+    /**
+     *  Get the total amount of tickets for the concert
+     *  @return int
+     */
+    public function totalTickets() : int
+    {
+        return $this->tickets()->count();
+    }
+
+    /**
+     *  Get the percentage of tickets that have been sold out
+     *  @return string
+     */
+    public function percentSoldOut() : string
+    {
+        return number_format(($this->ticketsSold() / $this->totalTickets()) * 100, 2);
+    }
 }

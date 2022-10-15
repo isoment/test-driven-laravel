@@ -27,16 +27,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="pb-2">
-                        <p class="mb-1">This show is 65% sold out.</p>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-success" 
-                                 role="progressbar" 
-                                 style="width: 25%" 
-                                 aria-valuenow="25" 
-                                 aria-valuemin="0" 
-                                 aria-valuemax="100">
-                            </div>
-                        </div>
+                        <p class="mb-1">This show is {{ $concert->percentSoldOut() }}% sold out.</p>
+                        <progress class="progress w-100" 
+                                  value="{{ $concert->ticketsSold() }}" 
+                                  max="{{ $concert->totalTickets() }}">
+                            {{ $concert->percentSoldOut() }}%
+                        </progress>
                     </div>
                     <hr>
                     <div class="row mt-4">

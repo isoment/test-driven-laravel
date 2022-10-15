@@ -1065,3 +1065,12 @@ tests. We can create a custom class with helper methods of creating database ent
         },
 
     Run... composer dump-autoload
+
+
+Section 23
+----------
+
+PHPUnit has an assertEquals function, the first two arguments are the values to compare, the second is
+the custom error message and the four is the precision for when we are comparing numbers.
+
+    $this->assertEquals($value1, $value2, '', 0.00001);

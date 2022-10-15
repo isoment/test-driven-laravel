@@ -25,7 +25,7 @@ class ViewPublishedConcertOrderTest extends TestCase
         $response = $this->get("/backstage/published-concerts/{$concert->id}/orders");
 
         $response->assertStatus(200);
-        $response->assertViewIs('backstage.published-concert-orders.index');
+        $response->assertViewIs('backstage.published-concert-orders.list');
         $this->assertTrue($response->data('concert')->is($concert));
     }
 
