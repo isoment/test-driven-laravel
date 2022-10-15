@@ -28,12 +28,12 @@ class Concert extends Model
     }
 
     /**
-     *  The tickets table is a pivot. Many to many relationship between
-     *  the Order and Concert models.
+     *  Get the orders for a concert. Get a collection of order_id's
+     *  from  all the tickets belonging to this concert.
      */
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'tickets');
+        return Order::whereIn('id', $this->tickets()->pluck('order_id'));
     }
 
     public function tickets()
@@ -198,5 +198,14 @@ class Concert extends Model
     public function percentSoldOut() : string
     {
         return number_format(($this->ticketsSold() / $this->totalTickets()) * 100, 2);
+    }
+
+    /**
+     *  Get the concerts revenue in dollars
+     *  @return int|float
+     */
+    public function revenueInDollars() : int|float
+    {
+        return $this->orders()->sum('amount') / 100;
     }
 }
