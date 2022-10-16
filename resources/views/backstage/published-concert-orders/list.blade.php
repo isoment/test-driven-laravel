@@ -16,6 +16,8 @@
                    class="btn btn-primary">
                     Orders
                 </a>
+                <a href="#"
+                   class="btn btn-primary ml-2">Message Attendees</a>
             </div>
         </div>
     </div>

@@ -27,6 +27,11 @@ class Concert extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attendeeMessages()
+    {
+        return $this->hasMany(AttendeeMessage::class);
+    }
+
     /**
      *  Get the orders for a concert. Get a collection of order_id's
      *  from  all the tickets belonging to this concert.

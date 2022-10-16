@@ -45,5 +45,15 @@ Route::middleware('auth')
             '/published-concerts/{id}/orders', 
             [App\Http\Controllers\Backstage\PublishedConcertOrdersController::class, 'index']
         )->name('backstage.published-concert-orders.index');
+
+        Route::get(
+            '/concerts/{id}/messages/new',
+            [App\Http\Controllers\Backstage\ConcertMessagesController::class, 'create']
+        )->name('backstage.concert-messages.new');
+
+        Route::post(
+            '/concerts/{id}/messages',
+            [App\Http\Controllers\Backstage\ConcertMessagesController::class, 'store']
+        )->name('backstage.concert-messages.store');
     });
 
