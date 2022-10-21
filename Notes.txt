@@ -1074,3 +1074,39 @@ PHPUnit has an assertEquals function, the first two arguments are the values to 
 the custom error message and the four is the precision for when we are comparing numbers.
 
     $this->assertEquals($value1, $value2, '', 0.00001);
+
+
+Section 25
+----------
+
+Laravel has some handy helpers that we can use for faking things like Mail and Queue during
+testing so we don't have to actually process them.
+
+Take the following test...
+
+    public function some_test
+    {
+        Queue::fake();
+
+        ....
+
+        Queue::assertPushed(SendAttendeeMessage::class);
+    }
+
+The above asserts that the queue received an instance of the specified class. We can also provide a 
+closure as an argument to assertPushed(). The closure returns a boolean, here we can check to determine
+if the Job is the right job that we expect.
+
+    Queue::assertPushed(SendAttendeeMessage::class, function($job) use($message) {
+        return $job->message->is($message);
+    });
+
+    In the above example we check that the message matches that of the job.
+
+The Job Queue can be used to perform work that is more resource intensive to avoid bogging down our
+application for the user. We can create a new job...
+
+    php artisan make:job SendAttendeeMessage
+
+A good strategy for testing jobs is to test that a job was called in a feature test like we did above
+and then to test the actual job in a unit test.

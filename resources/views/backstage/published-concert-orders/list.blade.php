@@ -16,7 +16,7 @@
                    class="btn btn-primary">
                     Orders
                 </a>
-                <a href="#"
+                <a href="{{ route('backstage.concert-messages.new', $concert->id) }}"
                    class="btn btn-primary ml-2">Message Attendees</a>
             </div>
         </div>

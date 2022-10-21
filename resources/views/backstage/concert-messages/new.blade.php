@@ -23,27 +23,27 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card mt-4" style="max-width: 30rem; margin: auto">
     <div class="card-body">
-        <form action="#" method="POST">
+        <form action="{{ route('backstage.concert-messages.store', $concert->id) }}" method="POST">
             @csrf
             <div class="form-group {{ $errors->first('subject', 'has-error')}}">
                 <label class="form-label">Subject</label>
                 <input name="subject" class="form-control" value="{{ old('subject') }}">
-                {{-- @if($errors->has('subject'))
-                    <p class="help-block">
+                @if($errors->has('subject'))
+                    <p class="text-danger">
                         {{ $errors->first('subject') }}
                     </p>
-                @endif --}}
+                @endif
             </div>
             <div class="form-group {{ $errors->first('message', 'has-error')}}">
                 <label class="form-label">Message</label>
                 <textarea class="form-control" name="message" rows="10">{{ old('message') }}</textarea>
-                {{-- @if($errors->has('message'))
-                    <p class="help-block">
+                @if($errors->has('message'))
+                    <p class="text-danger">
                         {{ $errors->first('message') }}
                     </p>
-                @endif --}}
+                @endif
             </div>
             <div>
                 <button class="btn btn-primary">Send Now</button>

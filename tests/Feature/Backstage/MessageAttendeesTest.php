@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Backstage;
 
+use App\Jobs\SendAttendeeMessage;
 use App\Models\AttendeeMessage;
 use App\Models\User;
 use Database\Helpers\FactoryHelpers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class MessageAttendeesTest extends TestCase
@@ -65,6 +67,8 @@ class MessageAttendeesTest extends TestCase
      */
     public function a_promoter_can_send_a_new_message()
     {
+        Queue::fake();
+
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -84,5 +88,79 @@ class MessageAttendeesTest extends TestCase
         $this->assertEquals($concert->id, $message->concert_id);
         $this->assertEquals('My Subject', $message->subject);
         $this->assertEquals('My Message', $message->message);
+
+        Queue::assertPushed(SendAttendeeMessage::class, function($job) use($message) {
+            return $job->attendeeMessage->is($message);
+        });
+    }
+
+    /**
+     *  @test
+     */
+    public function a_promoter_cannot_send_a_new_message_for_other_concerts()
+    {
+        Queue::fake();
+
+        $concert = FactoryHelpers::createPublished();
+
+        $response = $this->post("/backstage/concerts/{$concert->id}/messages", [
+            'subject' => 'My Subject',
+            'message' => 'My Message',
+        ]);
+
+        $response->assertRedirect("/login");
+        $this->assertEquals(0, AttendeeMessage::count());
+
+        Queue::assertNotPushed(SendAttendeeMessage::class);
+    }
+
+    /**
+     *  @test
+     */
+    public function subject_is_required()
+    {
+        Queue::fake();
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $concert = FactoryHelpers::createPublished([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->post("/backstage/concerts/{$concert->id}/messages", [
+            'subject' => '',
+            'message' => 'My Message',
+        ]);
+
+        $response->assertSessionHasErrors('subject');
+        $this->assertEquals(0, AttendeeMessage::count());
+
+        Queue::assertNotPushed(SendAttendeeMessage::class);
+    }
+
+    /**
+     *  @test
+     */
+    public function message_is_required()
+    {
+        Queue::fake();
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $concert = FactoryHelpers::createPublished([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->post("/backstage/concerts/{$concert->id}/messages", [
+            'subject' => 'My Subject',
+            'message' => '',
+        ]);
+
+        $response->assertSessionHasErrors('message');
+        $this->assertEquals(0, AttendeeMessage::count());
+
+        Queue::assertNotPushed(SendAttendeeMessage::class);
     }
 }
