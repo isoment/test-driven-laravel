@@ -19,11 +19,22 @@ class AttendeeMessage extends Model
         return $this->belongsTo(Concert::class);
     }
 
-    /**
-     *  @return Illuminate\Support\Collection
-     */
-    public function recipients() : Collection
+    public function orders()
     {
-        return $this->concert->orders()->pluck('email');
+        return $this->concert->orders();
+    }
+
+    /**
+     *  We chunk 20 orders at a time and execute the callback passing
+     *  in the email from the order.
+     *  @param int $chunkSize
+     *  @param callable $callback
+     *  @return void
+     */
+    public function withChunkedRecipients(int $chunkSize, callable $callback) : void
+    {
+        $this->orders()->chunk($chunkSize, function($orders) use($callback) {
+            $callback($orders->pluck('email'));
+        });
     }
 }

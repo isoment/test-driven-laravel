@@ -1130,3 +1130,34 @@ There is also an alternative approach where we dispatch the job directly from th
 
 This approach tests a bit more since all the Job features get invoked when the test is run. This will
 actually use the asynchronous queue.
+
+When we decide to use a job queue often it is because a lot of work needs to be done. In our example where
+we are sending emails we need to have a way to deal with failures. Laravel has a feature where we can store
+any failed jobs in a database table.
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $this->attendeeMessage->recipients()->each(function($recipient) {
+            Mail::to($recipient)->queue(new AttendeeMessageEmail($this->attendeeMessage));
+        });
+    }
+
+And then we need to update our test assertions...
+
+    Mail::assertQueued(AttendeeMessageEmail::class, function($mail) use($message) {
+        return $mail->hasTo('alex@example.com')
+            && $mail->attendeeMessage->is($message);
+    });
+
+Another issue with queues is that sometimes we need to perform work on a very large collection of models
+in this case it is best to use chunking. Lets say we need to load 20000 user models to perform some type
+of action. We can use the following to load 20 at a time and do what we need to do...
+
+    User::chunk(20, function($users) {
+        ...job work
+    });
