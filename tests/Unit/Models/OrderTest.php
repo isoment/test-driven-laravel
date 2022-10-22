@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Models;
 
 use App\Billing\Charge;
 use App\Models\Order;

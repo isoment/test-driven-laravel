@@ -1110,3 +1110,23 @@ application for the user. We can create a new job...
 
 A good strategy for testing jobs is to test that a job was called in a feature test like we did above
 and then to test the actual job in a unit test.
+
+When testing the job we can either instantiate it directly withing the test and call the handle() method
+from the new instance which is where the logic of the job is performed...
+
+    public function my_test()
+    {
+        $job = new SendAttendeeMessage($message);
+        $job->handle();
+    }
+
+There is also an alternative approach where we dispatch the job directly from the test...
+
+    public function my_test()
+    {
+        $job = new SendAttendeeMessage($message);
+        $job->handle();
+    }
+
+This approach tests a bit more since all the Job features get invoked when the test is run. This will
+actually use the asynchronous queue.
