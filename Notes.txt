@@ -1161,3 +1161,20 @@ of action. We can use the following to load 20 at a time and do what we need to 
     User::chunk(20, function($users) {
         ...job work
     });
+
+
+Section 27
+----------
+
+Laravel comes with fake implementations of File and Storage functionality that we can use for testing. The
+filesystem.php file is where we can define the different file systems for storage. There are three disk
+that are defined out of the box.
+
+    The local disk is the one in the storage/app folder.
+
+    The public disk which is a subfolder of the local disk.
+
+    The s3 filesystem is for Amazon S3
+
+Just like with mail there is a fake() method on the Storage facade that we can use for testing. The files
+are then stored in storage/framework/testing/disks
