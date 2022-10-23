@@ -1178,3 +1178,9 @@ that are defined out of the box.
 
 Just like with mail there is a fake() method on the Storage facade that we can use for testing. The files
 are then stored in storage/framework/testing/disks
+
+    Laravel does not remove the files after each test. Each time Storage::fake() is called again the
+    old files are removed.
+
+When running tests using laravels built in image methods on the File class we need to make sure that
+the gd extension is installed in docker. See the docker file.

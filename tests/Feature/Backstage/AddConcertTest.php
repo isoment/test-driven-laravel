@@ -5,8 +5,8 @@ namespace Tests\Feature\Backstage;
 use App\Models\Concert;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Testing\File;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -479,16 +479,24 @@ class AddConcertTest extends TestCase
      */
     public function a_poster_image_is_uploaded_if_included()
     {
-        Storage::fake('s3');
+        Storage::fake('public');
 
         $user = User::factory()->create();
         $this->actingAs($user);
 
+        $file = File::image('concert-poster.png');
+
         $response = $this->post('/backstage/concerts', $this->validParam([
-            'posterImage' => File::image('concert-poster.png'),
+            'poster_image' => $file,
         ]));
 
         $this->assertNotNull(Concert::first()->poster_image_path);
-        Storage::disk('s3')->assertExists(Concert::first()->poster_image_path);
+
+        Storage::disk('public')->assertExists(Concert::first()->poster_image_path);
+        
+        $this->assertFileEquals(
+            $file->getPathname(),
+            Storage::disk('public')->path(Concert::first()->poster_image_path)
+        );
     }
 }
