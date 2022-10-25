@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class ConcertController extends Controller
 {
@@ -43,6 +44,7 @@ class ConcertController extends Controller
             'zip' => ['required'],
             'ticket_price' => ['required', 'numeric', 'min:5'],
             'ticket_quantity' => ['required', 'numeric', 'min:1'],
+            'poster_image' => ['image', Rule::dimensions()->minWidth(400)->ratio(8.5/11)],
         ]);
 
         $concert = Auth::user()->concerts()->create([
