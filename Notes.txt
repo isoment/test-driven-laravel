@@ -1184,3 +1184,29 @@ are then stored in storage/framework/testing/disks
 
 When running tests using laravels built in image methods on the File class we need to make sure that
 the gd extension is installed in docker. See the docker file.
+
+
+Section 28
+----------
+
+Laravel has a built in system for events and testing utilities to work with events. When testing we can use
+Event facade and specify which events we want to fake.
+
+At the start of the test...
+
+    Event::fake([ConcertAdded::class]);
+
+Then we can make assertions about the event...
+
+    Event::assertDispatched(ConcertAdded::class);
+
+We can use artisan to generate a new event class...
+
+    php artisan make:event ConcertAdded
+
+Events can be called within our code using the following syntax...
+
+    ConcertAdded::dispatch($concert);
+
+The Laravel event system is an observer pattern. There can be many listeners registered that will listen
+for an event to be dispatched.

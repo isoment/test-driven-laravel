@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Backstage;
 
+use App\Events\ConcertAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Concert;
 use App\NullFile;
@@ -67,6 +68,8 @@ class ConcertController extends Controller
             // that will simply return null when we have no file.
             'poster_image_path' => request('poster_image', new NullFile)->store('posters', 'public')
         ]);
+
+        ConcertAdded::dispatch($concert);
 
         return redirect()->route('backstage.concerts.index');
     }
