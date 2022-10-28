@@ -213,4 +213,12 @@ class Concert extends Model
     {
         return $this->orders()->sum('amount') / 100;
     }
+
+    /**
+     *  @return bool
+     */
+    public function hasPoster() : bool
+    {
+        return $this->poster_image_path !== null;
+    }
 }

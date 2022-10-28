@@ -1209,4 +1209,38 @@ Events can be called within our code using the following syntax...
     ConcertAdded::dispatch($concert);
 
 The Laravel event system is an observer pattern. There can be many listeners registered that will listen
-for an event to be dispatched.
+for an event to be dispatched. We can also test that there are listeners that listen for a given event and
+perform some action.
+
+When testing the listener we can instantiate it directly and perform assertions just like with a queue.
+
+    $listener = new SchedulePosterImageProcessing();
+    $listener->handle($event);
+
+An alternative way would be to fire off the actual event since then we get the benefit of testing the
+associated logic as well. Here we are fire the ConcertAdded event and then assert that a ProcessPosterImage
+class was pushed to the queue.
+
+        Queue::fake();
+
+        $concert = FactoryHelpers::createUnpublished([
+            'poster_image_path' => 'posters/example-poster.png'
+        ]);
+
+        ConcertAdded::dispatch($concert);
+
+        Queue::assertPushed(ProcessPosterImage::class);
+
+Lets create an event and specify that it is listening for the ConcertAdded event...
+
+    php artisan make:listener SchedulePosterImageProcessing --event=ConcertAdded
+
+Then we can register the event and listener in the EventServiceProvider file.
+
+    protected $listen = [
+        ...
+
+        ConcertAdded::class => [
+            SchedulePosterImageProcessing::class
+        ],
+    ];
