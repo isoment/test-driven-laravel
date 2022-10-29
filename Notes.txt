@@ -1244,3 +1244,20 @@ Then we can register the event and listener in the EventServiceProvider file.
             SchedulePosterImageProcessing::class
         ],
     ];
+
+Intervention image library is useful for converting, resizing and manipulating images. See the following
+for install instructions...
+
+    https://image.intervention.io/v2/introduction/installation
+
+It comes with a facade that we can import and use to work with images...
+
+    use Intervention\Image\Facades\Image;
+
+    $image = Image::make($imageContents);
+
+    $image->resize(600, null, function($constraint) {
+        $constraint->aspectRatio();
+    })->encode();
+
+We have added a __fixtures__ folder with several different image files we can use for testing and comparison.
