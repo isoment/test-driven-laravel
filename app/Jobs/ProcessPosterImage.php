@@ -9,6 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProcessPosterImage implements ShouldQueue
 {
@@ -33,6 +35,13 @@ class ProcessPosterImage implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $imageContents = Storage::disk('public')->get($this->concert->poster_image_path);
+
+        // Bring the image data into Intervention
+        $image = Image::make($imageContents);
+
+        $image->resize(600)->encode();
+
+        Storage::disk('public')->put($this->concert->poster_image_path, (string) $image);
     }
 }
