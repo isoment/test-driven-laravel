@@ -54,6 +54,8 @@ class CreateNewUser implements CreatesNewUsers
 
         $invitation = Invitation::findByCode($input['invitation_code']);
 
+        abort_if($invitation->hasBeenUsed(), 404);
+
         $user = User::create([
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
