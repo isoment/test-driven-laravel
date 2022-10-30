@@ -53,6 +53,10 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
+    /**
+     *  This method is no longer needed since newer versions of laravel have a from() method
+     *  we can use to set the previous URL.
+     */
     protected function fromURL(string $url) : self
     {
         session()->setPreviousUrl($url);

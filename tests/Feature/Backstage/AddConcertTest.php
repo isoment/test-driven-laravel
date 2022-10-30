@@ -129,7 +129,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['title' => '']));
 
         $response->assertStatus(302);
@@ -215,7 +215,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['date' => '']));
 
         $response->assertStatus(302);
@@ -233,7 +233,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['date' => 'fake-date']));
 
         $response->assertStatus(302);
@@ -251,7 +251,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
         ->post('/backstage/concerts', $this->validParam(['time' => '']));
 
         $response->assertStatus(302);
@@ -269,7 +269,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['time' => 'fake-time']));
 
         $response->assertStatus(302);
@@ -287,7 +287,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['venue' => '']));
 
         $response->assertStatus(302);
@@ -305,7 +305,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['venue_address' => '']));
 
         $response->assertStatus(302);
@@ -323,7 +323,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['city' => '']));
 
         $response->assertStatus(302);
@@ -341,7 +341,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['state' => '']));
 
         $response->assertStatus(302);
@@ -359,7 +359,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['zip' => '']));
 
         $response->assertStatus(302);
@@ -377,7 +377,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_price' => '']));
 
         $response->assertStatus(302);
@@ -395,7 +395,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_price' => 'string']));
 
         $response->assertStatus(302);
@@ -413,7 +413,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_price' => '4.87']));
 
         $response->assertStatus(302);
@@ -431,7 +431,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_quantity' => '']));
 
         $response->assertStatus(302);
@@ -449,7 +449,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_quantity' => 'string']));
 
         $response->assertStatus(302);
@@ -467,7 +467,7 @@ class AddConcertTest extends TestCase
 
         $this->actingAs($user);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['ticket_quantity' => 0]));
 
         $response->assertStatus(302);
@@ -494,11 +494,6 @@ class AddConcertTest extends TestCase
         $this->assertNotNull(Concert::first()->poster_image_path);
 
         Storage::disk('public')->assertExists(Concert::first()->poster_image_path);
-        
-        $this->assertFileEquals(
-            $file->getPathname(),
-            Storage::disk('public')->path(Concert::first()->poster_image_path)
-        );
     }
 
     /**
@@ -512,7 +507,7 @@ class AddConcertTest extends TestCase
         $this->actingAs($user);
         $file = File::create('not-a-poster.pdf');
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['poster_image' => $file]));
 
         $response->assertRedirect('/backstage/concerts/new');
@@ -531,7 +526,7 @@ class AddConcertTest extends TestCase
         $this->actingAs($user);
         $file = File::image('poster.png', 399, 516);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['poster_image' => $file]));
 
         $response->assertRedirect('/backstage/concerts/new');
@@ -550,7 +545,7 @@ class AddConcertTest extends TestCase
         $this->actingAs($user);
         $file = File::image('poster.png', 851, 1100);
 
-        $response = $this->fromUrl('/backstage/concerts/new')
+        $response = $this->from('/backstage/concerts/new')
             ->post('/backstage/concerts', $this->validParam(['poster_image' => $file]));
 
         $response->assertRedirect('/backstage/concerts/new');

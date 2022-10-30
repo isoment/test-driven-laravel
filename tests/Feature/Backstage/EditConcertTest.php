@@ -311,7 +311,7 @@ class EditConcertTest extends TestCase
 
         $this->assertTrue($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}", 
                 $this->validParams(['title' => ''])
@@ -344,7 +344,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['subtitle' => ''])
@@ -371,7 +371,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['additional_information' => ''])
@@ -398,7 +398,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['date' => ''])
@@ -426,7 +426,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['date' => 'fake date'])
@@ -454,7 +454,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['time' => ''])
@@ -482,7 +482,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['time' => 'fake time'])
@@ -510,7 +510,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['venue' => ''])
@@ -538,7 +538,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['venue_address' => ''])
@@ -566,7 +566,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['city' => ''])
@@ -594,7 +594,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['state' => ''])
@@ -622,7 +622,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['zip' => ''])
@@ -650,7 +650,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_price' => ''])
@@ -678,7 +678,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_price' => 'string'])
@@ -706,7 +706,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_price' => 4.99])
@@ -734,7 +734,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_quantity' => ''])
@@ -762,7 +762,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_quantity' => 'string'])
@@ -790,7 +790,7 @@ class EditConcertTest extends TestCase
 
         $this->assertFalse($concert->isPublished());
 
-        $response = $this->fromURL("/backstage/concerts/{$concert->id}/edit")
+        $response = $this->from("/backstage/concerts/{$concert->id}/edit")
             ->patch(
                 "/backstage/concerts/{$concert->id}",
                 $this->validParams(['ticket_quantity' => 0])
