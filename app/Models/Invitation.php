@@ -11,8 +11,20 @@ class Invitation extends Model
 
     protected $guarded = [];
 
-    public static function findByCode(string $code)
+    /**
+     *  @param string $code
+     *  @return self
+     */
+    public static function findByCode(string $code) : self
     {
-        return self::where('code', $code)->first();
+        return self::where('code', $code)->firstOrFail();
+    }
+
+    /**
+     *  @return bool
+     */
+    public function hasBeenUsed() : bool
+    {
+        return $this->user_id !== NULL;
     }
 }

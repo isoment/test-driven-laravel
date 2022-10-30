@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
@@ -7,6 +9,7 @@ use App\Billing\PaymentGateway;
 use App\Exceptions\NotEnoughTicketsException;
 use App\Mail\OrderConfirmationEmail;
 use App\Models\Concert;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -19,7 +22,7 @@ class ConcertOrderController extends Controller
         $this->paymentGateway = $paymentGateway;
     }
 
-    public function store($concertId)
+    public function store(int $concertId) : JsonResponse
     {
         $concert = Concert::published()->findOrFail($concertId);
 

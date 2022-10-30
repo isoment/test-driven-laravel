@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendAttendeeMessage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -20,7 +21,7 @@ class ConcertMessagesController extends Controller
         ]);
     }
 
-    public function store(int $id)
+    public function store(int $id) : RedirectResponse
     {
         $concert = Auth::user()->concerts()->findOrFail($id);
 
