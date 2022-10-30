@@ -1261,3 +1261,10 @@ It comes with a facade that we can import and use to work with images...
     })->encode();
 
 We have added a __fixtures__ folder with several different image files we can use for testing and comparison.
+
+
+Section 29
+----------
+
+We want to set up the application so only users with an invitation code can register.Since we are using 
+Fortify we can modify the CreateNewUser class in App\Actions\Fortify to implement a customized registration flow.

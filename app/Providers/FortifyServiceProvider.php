@@ -36,8 +36,14 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // When a get request is sent to /login return the login view
         Fortify::loginView(function() {
             return view('auth.login');
+        });
+
+        // When a get request is sent for /register redirect to /login
+        Fortify::registerView(function() {
+            return redirect('/login');
         });
 
         RateLimiter::for('login', function (Request $request) {
