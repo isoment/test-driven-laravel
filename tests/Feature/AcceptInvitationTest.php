@@ -117,4 +117,71 @@ class AcceptInvitationTest extends TestCase
         $response->assertStatus(404);
         $this->assertEquals(0, User::count());
     }
+
+    /**
+     *  @test
+     */
+    public function the_email_is_required()
+    {
+        $invitation = Invitation::factory()->create([
+            'user_id' => NULL,
+            'code' => 'TESTCODE1234',
+        ]);
+
+        $response = $this->from('/invitations/TESTCODE1234')->post('/register', [
+            'email' => NULL,
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertRedirect('/invitations/TESTCODE1234');
+        $response->assertSessionHasErrors('email');
+        $this->assertEquals(0, User::count());
+    }
+
+    /**
+     *  @test
+     */
+    public function the_email_is_must_have_correct_format()
+    {
+        $invitation = Invitation::factory()->create([
+            'user_id' => NULL,
+            'code' => 'TESTCODE1234',
+        ]);
+
+        $response = $this->from('/invitations/TESTCODE1234')->post('/register', [
+            'email' => 'random string',
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertRedirect('/invitations/TESTCODE1234');
+        $response->assertSessionHasErrors('email');
+        $this->assertEquals(0, User::count());
+    }
+
+    /**
+     *  @test
+     */
+    public function the_email_must_be_unique()
+    {
+        $user = User::factory()->create(['email' => 'john@example.com']);
+
+        $this->assertEquals(1, User::count());
+
+        $invitation = Invitation::factory()->create([
+            'user_id' => NULL,
+            'code' => 'TESTCODE1234',
+        ]);
+
+        $response = $this->from('/invitations/TESTCODE1234')->post('/register', [
+            'email' => 'john@example.com',
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertRedirect('/invitations/TESTCODE1234');
+        $response->assertSessionHasErrors('email');
+        $this->assertEquals(1, User::count());
+    }
 }
