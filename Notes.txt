@@ -1266,5 +1266,26 @@ We have added a __fixtures__ folder with several different image files we can us
 Section 29
 ----------
 
-We want to set up the application so only users with an invitation code can register.Since we are using 
+We want to set up the application so only users with an invitation code can register. Since we are using 
 Fortify we can modify the CreateNewUser class in App\Actions\Fortify to implement a customized registration flow.
+
+We can override the /register endpoint GET method by adding the following to the 
+FortifyServiceProvider.php file so we simply redirect to the login...
+
+    Fortify::registerView(function() {
+        return redirect('/login');
+    });
+
+Laravel has support for creating custom artisan commands. Sometimes we might not want to implement pages
+or UI for certain tasks and this is a great use case for creating custom commands.
+
+There are a few different ways we can create console commands, they can be their own classes in the
+Console folder but they can also be defined in the routes/console.php
+
+Commands can be tested like any other class we have covered so far, we can create a unit test the
+actual class itself. We can also use a feature test and test it more from the perspective of the
+end user. We can run commands directly from out tests using the following, where the array contains
+the arguments for the command...
+
+    $this->artisan('invite-promoter', ['email' => 'john@example.com']);
+

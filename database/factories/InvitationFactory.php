@@ -18,7 +18,8 @@ class InvitationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'email' => 'somebody@example.com',
+            'code' => 'TESTCODE1234',
         ];
     }
 }
