@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Mail\InvitationEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class Invitation extends Model
 {
@@ -31,5 +35,10 @@ class Invitation extends Model
     public function hasBeenUsed() : bool
     {
         return $this->user_id !== NULL;
+    }
+
+    public function send() : void
+    {
+        Mail::to($this->email)->send(new InvitationEmail($this));
     }
 }
