@@ -1317,3 +1317,6 @@ https://stripe.com/docs/connect/oauth-reference
 
 We can use dusk to test that when a user hits a certain URL in our application the stripe connect URL
 is visited.
+
+    The errors that laravel dusk provides can be less useful then the ones phpunit will throw when 
+    writing feature tests. TDD is easier when we get clear error messages.

@@ -58,5 +58,10 @@ Route::middleware('auth')
             '/concerts/{id}/messages',
             [App\Http\Controllers\Backstage\ConcertMessagesController::class, 'store']
         )->name('backstage.concert-messages.store');
+
+        Route::get(
+            '/stripe-connect/authorize', 
+            [App\Http\Controllers\Backstage\StripeConnectController::class, 'authorizeRedirect']
+        );
     });
 

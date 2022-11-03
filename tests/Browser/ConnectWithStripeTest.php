@@ -9,6 +9,8 @@ use Tests\DuskTestCase;
 
 class ConnectWithStripeTest extends DuskTestCase
 {
+    use DatabaseMigrations;
+
     /**
      *  @test
      */
@@ -22,7 +24,7 @@ class ConnectWithStripeTest extends DuskTestCase
         $this->browse(function (Browser $browser) use($user) {
             $browser->loginAs($user)
                     ->visit('/backstage/stripe-connect/authorize')
-                    ->assertUrlIs('https://connect.stripe.com/oauth/authorize')
+                    ->assertUrlIs('https://connect.stripe.com/oauth/v2/authorize')
                     ->assertQueryStringHas('response_type', 'code')
                     ->assertQueryStringHas('scope', 'read_write')
                     ->assertQueryStringHas('client_id', config('services.stripe.client_id'));
