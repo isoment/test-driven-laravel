@@ -858,9 +858,13 @@ Fortify will already define the route for us, we can just tell it to return the 
 Dusk...
 -------
 
-We can run  dusk tests using...
+We can run dusk tests using...
 
     php artisan dusk
+
+We can create a dusk test using...
+
+    php artisan dusk:make MyDuskTest
 
 To install laravel dusk the php zip extension must be installed in the docker container. See the
 docker file for the latest. Follow the instructions in the documentation for installing dusk and the
@@ -1289,3 +1293,27 @@ the arguments for the command...
 
     $this->artisan('invite-promoter', ['email' => 'john@example.com']);
 
+
+Section 30
+----------
+
+Stripe has a feature called stripe connect that is stripes Oauth implementation.
+
+We can log into the stripe dashboard and click on the connect section to interact with connect, we
+need to click on the settings icon in the navbar and then go to the connect section settings, in these
+settings we should enable OAuth for Express and Standard accounts.
+
+We should add a redirect for the application like...
+
+    http://localhost:8008/backstage/stripe-connect/redirect
+
+The stripe connect flow happens in the browser, a user is redirected to a page located on stripes servers,
+they click a button and a lot of stuff is done on stripes side and then they are redirected back to our application.
+It is not possible to write feature tests like we have with other sections of our application.
+
+    The best way to do this type of testing is by using Laravel dusk.
+
+https://stripe.com/docs/connect/oauth-reference
+
+We can use dusk to test that when a user hits a certain URL in our application the stripe connect URL
+is visited.
