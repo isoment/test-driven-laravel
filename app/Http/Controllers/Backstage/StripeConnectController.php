@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Log;
 
 class StripeConnectController extends Controller
 {
+    public function connect()
+    {
+        return view('backstage.stripe-connect.connect');
+    }
+
     public function authorizeRedirect() : RedirectResponse
     {
         $url = vsprintf('%s?%s', [
@@ -30,16 +35,12 @@ class StripeConnectController extends Controller
 
     public function redirect() : RedirectResponse
     {
-        Log::info('HIT');
-
         // Make a request to stripe to get the access token
         $accessTokenResponse = Http::asForm()->post('https://connect.stripe.com/oauth/token', [
             'grant_type' => 'authorization_code',
             'code' => request('code'),
             'client_secret' => config('services.stripe.secret')
         ])->json();
-
-        Log::info($accessTokenResponse);
 
         // Store the stripe user id and stripe access token contained in the response above
         Auth::user()->update([

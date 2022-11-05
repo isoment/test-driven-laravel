@@ -1320,3 +1320,25 @@ is visited.
 
     The errors that laravel dusk provides can be less useful then the ones phpunit will throw when 
     writing feature tests. TDD is easier when we get clear error messages.
+
+We can unit test middleware by instantiating the middleware and performing tests on it. To generate a new middleware
+
+    php artisan make:middleware ForceStripeAccount
+
+Then we can test the middleware...
+
+    ...
+
+    $this->actingAs($user);
+
+    $middleware = new ForceStripeAccount;
+
+    $response = $middleware->handle(new Request(), function($request) {
+        $this->fail('The next middleware was called when it should not have been');
+    });
+
+    ...
+
+We can simply instantiate the middleware and call the handle() method that every middleware has, this method
+always accepts a request as the first argument and a callback as the second one to perform when the middleware
+passes. We ca use fail() to fail the test whenever the next() callback was called.

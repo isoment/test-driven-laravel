@@ -15,7 +15,7 @@ class ConnectWithStripeTest extends DuskTestCase
 
     /**
      *  @test
-     *  This test does not work. Fails when clicking the Skip this form button on stripe.
+     *  This test does not work. Unknown why.
      */
     public function connecting_a_stripe_account_successfully()
     {
@@ -24,28 +24,29 @@ class ConnectWithStripeTest extends DuskTestCase
             'stripe_access_token' => NULL,
         ]);
 
-        $this->browse(function (Browser $browser) use($user) {
+        $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                    ->visit('/backstage/stripe-connect/authorize')
-                    ->assertUrlIs('https://connect.stripe.com/oauth/v2/authorize')
-                    ->assertQueryStringHas('response_type', 'code')
-                    ->assertQueryStringHas('scope', 'read_write')
-                    ->assertQueryStringHas('client_id', config('services.stripe.client_id'))
-                    ->waitForReload(function(Browser $browser) {
-                        $browser->press("Skip this form");
-                    });
+                ->visit('/backstage/stripe-connect/connect')
+                ->clickLink('Connect with Stripe')
+                ->assertUrlIs('https://connect.stripe.com/oauth/v2/authorize')
+                ->assertQueryStringHas('response_type', 'code')
+                ->assertQueryStringHas('scope', 'read_write')
+                ->assertQueryStringHas('client_id', config('services.stripe.client_id'))
+                ->press('Skip this form')
+                ->waitForReload()
+                ->assertRouteIs('backstage.concerts.index');
 
-            tap($user->fresh(), function($user) {
-                $this->assertNotNull($user->stripe_account_id);
-                $this->assertNotNull($user->stripe_access_token);
+            tap($user->fresh(), static function (User $user) {
+                self::assertNotNull($user->stripe_account_id);
+                self::assertNotNull($user->stripe_access_token);
 
                 // We want to get the stripe account id to compare it to what we store on the
                 // users table. We can get it by passing the stripe access token.
                 $connectedAccount = Account::retrieve(null, [
-                    'api_key' => $user->stripe_access_token
+                    'api_key' => $user->stripe_access_token,
                 ]);
 
-                $this->assertEquals($connectedAccount->id, $user->stripe_account_id);
+                self::assertEquals($connectedAccount->id, $user->stripe_account_id);
             });
         });
     }
