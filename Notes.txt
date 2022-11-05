@@ -1342,3 +1342,21 @@ Then we can test the middleware...
 We can simply instantiate the middleware and call the handle() method that every middleware has, this method
 always accepts a request as the first argument and a callback as the second one to perform when the middleware
 passes. We ca use fail() to fail the test whenever the next() callback was called.
+
+PHP has invokable classes which can behave similar to functions. These types of classes can be called
+like functions and accept arguments. This lets us create classes that can stand in for closures (anonymous functions)
+
+    class Invokable
+    {
+        public function __invoke($arguments)
+        {
+
+        }
+    }
+
+    $invokeMe = new Invokable;
+    $invokable($args);
+
+See the ForceStripeAccount, ForceStripeAccountTest and ForceStripeAccountInvokable for how we can 
+use invokable classes. This is very useful for testing APIs that accept closures, we can verify that a 
+closure was called and track what arguments they were called with.
