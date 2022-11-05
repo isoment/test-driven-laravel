@@ -63,5 +63,10 @@ Route::middleware('auth')
             '/stripe-connect/authorize', 
             [App\Http\Controllers\Backstage\StripeConnectController::class, 'authorizeRedirect']
         );
+
+        Route::get(
+            '/stripe-connect/redirect', 
+            [App\Http\Controllers\Backstage\StripeConnectController::class, 'redirect']
+        );
     });
 
