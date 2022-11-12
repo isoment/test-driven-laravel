@@ -1360,3 +1360,25 @@ like functions and accept arguments. This lets us create classes that can stand 
 See the ForceStripeAccount, ForceStripeAccountTest and ForceStripeAccountInvokable for how we can 
 use invokable classes. This is very useful for testing APIs that accept closures, we can verify that a 
 closure was called and track what arguments they were called with.
+
+We can test that a route contains a given middleware using the following...
+
+    $routes = [
+        'backstage.concerts.index',
+    ];
+
+    foreach ($routes as $route) {
+        $this->assertContains(
+            ForceStripeAccount::class,
+            Route::getRoutes()->getByName($route)->gatherMiddleware()
+        );
+    }
+
+    The $routes variable will hold a list or route names, we can loop over each of these and check that
+    the ForceStripeAccount::class is present in the array of the routes middleware.
+
+Middleware can be applied to routes as a group...
+
+    Route::group(['middleware' => ForceStripeAccount::class], function() {
+        ...
+    }
