@@ -20,23 +20,31 @@ class StripePaymentGateway implements PaymentGateway
     }
 
     /**
+     *  We create a charge for the customers ticket purchase. 90% of the charge goes to
+     *  The promoter and we keep the remainder as a fee.
      *  @param int $charge this amount to the customer
      *  @param string $token representing the customers payment method
+     *  @param string $destinationAccountId the stripe account to deposit the charge into
      *  @throws \Stripe\Exception\InvalidRequestException
      *  @return App\Billing\Charge
      */
-    public function charge(int $amount, string $token) : Charge
+    public function charge(int $amount, string $token, string $destinationAccountId) : Charge
     {
         try {
             $stripeCharge = $this->stripe->charges->create([
                 'amount' => $amount,
                 'currency' => 'usd',
-                'source' => $token
+                'source' => $token,
+                'destination' => [
+                    'account' => $destinationAccountId,
+                    'amount' => $amount * 0.9
+                ]
             ], ['api_key' => $this->apiKey]);
 
             return new Charge([
                 'amount' => $stripeCharge['amount'],
                 'card_last_four' => $stripeCharge['payment_method_details']['card']['last4'],
+                'destination' => $destinationAccountId
             ]);
         } catch(\Stripe\Exception\InvalidRequestException $e) {
             throw new PaymentFailedException;
