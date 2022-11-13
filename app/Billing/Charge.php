@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Billing;
 
 class Charge 
@@ -16,8 +18,13 @@ class Charge
         return $this->data['card_last_four'];
     }
 
-    public function amount() : string
+    public function amount() : int
     {
         return $this->data['amount'];
+    }
+
+    public function destination() : string
+    {
+        return $this->data['destination'];
     }
 }

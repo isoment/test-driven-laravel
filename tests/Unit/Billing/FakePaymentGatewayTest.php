@@ -18,6 +18,20 @@ class FakePaymentGatewayTest extends TestCase
 
     /**
      *  @test
+     */
+    public function can_get_total_charges_for_a_specific_account()
+    {
+        $paymentGateway = new FakePaymentGateway;
+
+        $paymentGateway->charge(1000, $paymentGateway->getValidTestToken(), 'test_account_0000');
+        $paymentGateway->charge(2500, $paymentGateway->getValidTestToken(), 'test_account_1234');
+        $paymentGateway->charge(4000, $paymentGateway->getValidTestToken(), 'test_account_1234');
+
+        $this->assertEquals(6500, $paymentGateway->totalChargesFor('test_account_1234'));
+    }
+
+    /**
+     *  @test
      *  We need some way to make a sub-request so that we can test instances where there
      *  are multiple users trying to book the same tickets. We can create a hook in the
      *  fake payment gateway.
