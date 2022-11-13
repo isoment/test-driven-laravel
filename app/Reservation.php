@@ -48,13 +48,15 @@ class Reservation
      *  an order for the tickets.
      *  @param App\Billing\PaymentGateway $paymentGateway
      *  @param string $paymentToken
+     *  @param string $destinationAccountId
      *  @return App\Models\Order
      */
-    public function complete(PaymentGateway $paymentGateway, string $paymentToken) : Order
+    public function complete(PaymentGateway $paymentGateway, string $paymentToken, string $destinationAccountId) : Order
     {
         $charge = $paymentGateway->charge(
             $this->totalCost(), 
-            $paymentToken
+            $paymentToken,
+            $destinationAccountId
         );
 
         return Order::forTickets(

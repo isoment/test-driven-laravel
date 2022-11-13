@@ -19,7 +19,7 @@ trait PaymentGatewayContractTests
 
         // Create a new charge for an amount using a valid token
         $newCharges = $paymentGateway->newChargesDuring(function() use($paymentGateway) {
-            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
+            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken(), 'test_account_1234');
         });
 
         // Assert that there is a new charge created
@@ -61,7 +61,7 @@ trait PaymentGatewayContractTests
 
         $newCharges = $paymentGateway->newChargesDuring(function() use($paymentGateway) {
             try {
-                $paymentGateway->charge(2500, 'invalid-payment-token');
+                $paymentGateway->charge(2500, 'invalid-payment-token', 'test_account_1234');
             } catch(PaymentFailedException $e) {
                 return;
             }
@@ -79,12 +79,12 @@ trait PaymentGatewayContractTests
     {
         $paymentGateway = $this->getPaymentGateway();
 
-        $paymentGateway->charge(2000, $paymentGateway->getValidTestToken());
-        $paymentGateway->charge(3000, $paymentGateway->getValidTestToken());
+        $paymentGateway->charge(2000, $paymentGateway->getValidTestToken(), 'test_account_1234');
+        $paymentGateway->charge(3000, $paymentGateway->getValidTestToken(), 'test_account_1234');
 
         $newCharges = $paymentGateway->newChargesDuring(function() use($paymentGateway) {
-            $paymentGateway->charge(4000, $paymentGateway->getValidTestToken());
-            $paymentGateway->charge(5000, $paymentGateway->getValidTestToken());
+            $paymentGateway->charge(4000, $paymentGateway->getValidTestToken(), 'test_account_1234');
+            $paymentGateway->charge(5000, $paymentGateway->getValidTestToken(), 'test_account_1234');
         });
 
         $this->assertCount(2, $newCharges);
