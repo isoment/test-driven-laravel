@@ -34,7 +34,7 @@ class ConcertOrderController extends Controller
 
         try {
             // Reserve tickets
-            $reservation = $concert->reserveTickets(request('ticket_quantity'), request('email'));
+            $reservation = $concert->reserveTickets((int) request('ticket_quantity'), request('email'));
 
             // Complete the reservation
             $order = $reservation->complete(
